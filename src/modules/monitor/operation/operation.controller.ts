@@ -12,7 +12,7 @@ export class OperationController {
   constructor(private readonly operationService: OperationService) {}
 
   /**
-   * 获取日志列表
+   * 获取操作日志列表
    */
   @Get()
   @ApiPaginatedResponse(OperationEntity)
@@ -21,7 +21,7 @@ export class OperationController {
   }
 
   /**
-   * 获取日志详情
+   * 获取操作日志详情
    */
   @Get(':id')
   @ApiOkResponse({ type: OperationEntity })

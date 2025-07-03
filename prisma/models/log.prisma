@@ -17,3 +17,27 @@ model OperationLog {
   /// ip地址对应的地理位置
   address      String
 }
+
+/// 登录日志记录表
+model LoginLog {
+  /// 登录日志ID
+  id        Int      @id @default(autoincrement())
+  /// 登录账号
+  username  String
+  /// 登录状态
+  status    Boolean  @default(true)
+  /// ip地址
+  ip        String
+  /// ip地址对应的地理位置
+  address   String
+  /// 浏览器类型
+  browser   String?
+  /// 操作系统
+  os        String?
+  /// 提示消息
+  message   String   @default("")
+  /// 登录时间
+  loginTime DateTime @default(now())
+  /// 创建时间
+  createdAt DateTime @default(now())
+}

@@ -61,6 +61,22 @@ CREATE TABLE "OperationLog" (
 );
 
 -- CreateTable
+CREATE TABLE "LoginLog" (
+    "id" SERIAL NOT NULL,
+    "username" TEXT NOT NULL,
+    "status" BOOLEAN NOT NULL DEFAULT true,
+    "ip" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
+    "browser" TEXT,
+    "os" TEXT,
+    "message" TEXT NOT NULL DEFAULT '',
+    "loginTime" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "LoginLog_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Menu" (
     "id" SERIAL NOT NULL,
     "name" TEXT,
