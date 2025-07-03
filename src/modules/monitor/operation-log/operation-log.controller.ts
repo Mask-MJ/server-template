@@ -7,7 +7,7 @@ import { OperationLogEntity } from './operation-log.entity';
 
 @ApiTags('操作日志管理')
 @ApiBearerAuth('bearer')
-@Controller('operation')
+@Controller('operation-log')
 export class OperationLogController {
   constructor(private readonly operationLogService: OperationLogService) {}
 
