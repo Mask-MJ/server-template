@@ -2,7 +2,7 @@ import { PartialType, IntersectionType, PickType } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
 import { BaseDto } from 'src/common/dto/base.dto';
 
-export class CreateOperationDto {
+export class CreateOperationLogDto {
   @IsString()
   title: string;
 
@@ -19,9 +19,9 @@ export class CreateOperationDto {
   ip: string;
 }
 
-export class QueryOperationDto extends PartialType(
+export class QueryOperationLogDto extends PartialType(
   IntersectionType(
-    PickType(CreateOperationDto, ['username', 'businessType', 'module']),
+    PickType(CreateOperationLogDto, ['username', 'businessType', 'module']),
     BaseDto,
   ),
 ) {}

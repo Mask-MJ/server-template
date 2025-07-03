@@ -1,6 +1,6 @@
 import { OperationLog } from '@prisma/client';
 
-export class OperationEntity implements OperationLog {
+export class OperationLogEntity implements OperationLog {
   id: number;
   title: string;
   businessType: number;
