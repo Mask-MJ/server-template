@@ -59,9 +59,17 @@ export class UserController {
    */
   @Get('info')
   @ApiOkResponse({ type: UserEntity })
-  @Permissions('system:user:query')
   findSelf(@ActiveUser() user: ActiveUserData) {
     return this.userService.findSelf(user.sub);
+  }
+
+  /**
+   * 获取当前登录用户权限码
+   */
+  @Get('code')
+  @ApiOkResponse({ type: String, isArray: true })
+  findSelfCode(@ActiveUser() user: ActiveUserData) {
+    return this.userService.findSelfCode(user.sub);
   }
 
   /**

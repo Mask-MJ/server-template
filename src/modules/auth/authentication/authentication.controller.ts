@@ -1,9 +1,10 @@
 import { Controller, Post, Body, Headers } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { RefreshTokenDto, SignInDto, SignUpDto } from './authentication.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { Auth } from './decorators/auth.decorator';
 import { AuthType } from './enums/auth-type.enum';
+import { SignInEntity } from './authentication.entity';
 
 @ApiTags('登录认证')
 @Auth(AuthType.None)
@@ -23,6 +24,7 @@ export class AuthenticationController {
    * 登录
    */
   @Post('sign-in')
+  @ApiOkResponse({ type: SignInEntity })
   signIn(@Body() signInDto: SignInDto, @Headers('X-Real-IP') ip?: string) {
     return this.authenticationService.signIn(signInDto, ip);
   }

@@ -50,6 +50,17 @@ export class UserService {
     });
   }
 
+  async findSelfCode(id: number) {
+    const userInfo = await this.prisma.client.user.findUniqueOrThrow({
+      where: { id },
+      include: { roles: { include: { menus: true } } },
+    });
+    const codes = userInfo.roles.flatMap((role) =>
+      role.menus.map((menu) => menu.permission),
+    );
+    return Array.from(new Set(codes));
+  }
+
   async findAll(queryUserDto: QueryUserDto) {
     const {
       username,
