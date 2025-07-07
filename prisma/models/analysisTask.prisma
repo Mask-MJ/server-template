@@ -1,0 +1,24 @@
+/// 分析任务表
+model AnalysisTask {
+  id        Int      @id @default(autoincrement())
+  /// 任务名称
+  name      String
+  /// 任务状态 0未开始 1进行中 2已完成 3失败
+  status    Int      @default(0)
+  /// 任务备注
+  remark    String   @default("")
+  /// 创建者
+  createBy  String?
+  /// 更新者
+  updateBy  String?
+  /// 创建时间
+  createdAt DateTime @default(now())
+  /// 更新时间
+  updatedAt DateTime @updatedAt
+  /// 工厂id
+  factoryId Int
+  factory   Factory  @relation(fields: [factoryId], references: [id], onDelete: Cascade)
+  files     String[]
+  valves    Valve[]
+  result    Json?
+}
