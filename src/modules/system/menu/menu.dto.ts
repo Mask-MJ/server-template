@@ -33,6 +33,14 @@ export class CreateMenuDto {
   icon?: string;
 
   /**
+   * 激活菜单图标
+   * @example 'i-line-md:external-link'
+   */
+  @IsString()
+  @IsOptional()
+  actionIcon?: string;
+
+  /**
    * 菜单类别 C:目录 M:菜单 B:按钮
    * @example 'C'
    */

@@ -137,6 +137,7 @@ CREATE TABLE "Menu" (
     "name" TEXT,
     "path" TEXT,
     "icon" TEXT NOT NULL DEFAULT '',
+    "activeIcon" TEXT NOT NULL DEFAULT '',
     "type" TEXT NOT NULL,
     "order" INTEGER NOT NULL DEFAULT 1,
     "isCache" BOOLEAN NOT NULL DEFAULT true,

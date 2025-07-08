@@ -1,38 +1,114 @@
 /// 菜单信息表
 model Menu {
   /// 角色ID
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   /// 菜单名称
-  name       String?
+  name       String
   /// 菜单路径
-  path       String?
+  path       String    @unique
   /// 菜单图标
-  icon       String   @default("")
-  /// 菜单类别 C:目录 M:菜单 B:按钮
-  type       String
-  /// 显示顺序
-  order      Int      @default(1)
-  /// 是否缓存
-  isCache    Boolean  @default(true)
-  /// 是否可见
-  visible    Boolean  @default(true)
+  icon       String?
+  /// 激活时的图标名
+  activeIcon String?
+  /// 重定向
+  redirect   String?
+  /// 菜单类别
+  type       MenuType  @default(menu)
   /// 状态
-  status     Boolean  @default(true)
+  status     Boolean   @default(true)
   /// 权限标识
-  permission String   @default("")
+  permission String    @default("")
   /// 创建者
   createBy   String?
   /// 更新者
   updateBy   String?
   /// 创建时间
-  createdAt  DateTime @default(now())
+  createdAt  DateTime  @default(now())
   /// 更新时间
-  updatedAt  DateTime @updatedAt
+  updatedAt  DateTime  @updatedAt
   /// 备注
-  remark     String   @default("")
+  remark     String    @default("")
   /// 父级菜单ID
   parentId   Int?
-  parent     Menu?    @relation("MenuToMenu", fields: [parentId], references: [id])
-  children   Menu[]   @relation("MenuToMenu")
-  roles      Role[]   @relation("MenuToRole")
+  parent     Menu?     @relation("MenuToMenu", fields: [parentId], references: [id])
+  children   Menu[]    @relation("MenuToMenu")
+  roles      Role[]    @relation("MenuToRole")
+  /// 菜单元数据
+  meta       MenuMeta?
+}
+
+enum MenuType {
+  catalog
+  menu
+  embedded
+  link
+  button
+}
+
+enum BadgeVariants {
+  default
+  success
+  error
+  warning
+  info
+}
+
+enum BadgeType {
+  dot
+  normal
+}
+
+/// 菜单元数据
+model MenuMeta {
+  id                 Int            @id @default(autoincrement())
+  /// 菜单图标
+  icon               String?
+  /// 激活时的图标名
+  activeIcon         String?
+  /// 作为路由时，需要激活的菜单的Path
+  activePath         String?
+  /// 固定在标签栏
+  affixTab           Boolean        @default(false)
+  /// 在标签栏固定的顺序
+  affixTabOrder      Int            @default(0)
+  /// 徽标内容(当徽标类型为normal时有效)
+  badge              String?
+  /// 徽标类型
+  badgeType          BadgeType?
+  /// 徽标颜色
+  badgeVariants      BadgeVariants?
+  /// 在菜单中隐藏下级
+  hideChildrenInMenu Boolean        @default(false)
+  /// 在面包屑中隐藏
+  hideInBreadcrumb   Boolean        @default(false)
+  /// 在菜单中隐藏
+  hideInMenu         Boolean        @default(false)
+  /// 在标签栏中隐藏
+  hideInTab          Boolean        @default(false)
+  /// 内嵌Iframe的URL
+  iframeSrc          String?
+  /// 外链页面的URL
+  link               String?
+  /// 是否缓存页面
+  keepAlive          Boolean        @default(false)
+  /// 同一个路由最大打开的标签数
+  maxNumOfOpenTabs   Int?
+  /// 无需基础布局
+  noBasicLayout      Boolean        @default(false)
+  /// 是否在新窗口打开
+  openInNewWindow    Boolean        @default(false)
+  /// 额外的路由参数
+  query              String?
+  /// 菜单名称
+  title              String?
+  /// 重定向
+  redirect           String?
+  /// 菜单类别
+  type               MenuType       @default(menu)
+  /// 状态
+  status             Boolean        @default(true)
+  /// 权限标识
+  permission         String         @default("")
+  menuId             Int            @unique
+  menu               Menu           @relation(fields: [menuId], references: [id])
 }

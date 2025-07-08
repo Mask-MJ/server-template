@@ -4,6 +4,7 @@ export class MenuEntity implements Menu {
   name: string;
   path: string;
   icon: string;
+  activeIcon: string;
   type: string;
   visible: boolean;
   isCache: boolean;

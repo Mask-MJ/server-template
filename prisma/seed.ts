@@ -130,6 +130,7 @@ async function main() {
             order: 5,
             type: 'M',
             path: '/system/dictData/:id',
+            visible: false,
             children: {
               create: [
                 {
