@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsNumber, IsString } from 'class-validator';
-import { IntersectionType } from '@nestjs/swagger';
+import { ApiProperty, IntersectionType } from '@nestjs/swagger';
 
 export class PaginateDto {
   /**
@@ -37,7 +37,6 @@ export class TimeDto {
 export class BaseDto extends IntersectionType(PaginateDto, TimeDto) {}
 
 export class UploadDto {
-  @IsString()
-  fileName: string;
-  file: Express.Multer.File;
+  @ApiProperty({ type: 'array', items: { type: 'string', format: 'binary' } })
+  files: any[];
 }

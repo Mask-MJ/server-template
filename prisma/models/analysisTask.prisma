@@ -5,6 +5,8 @@ model AnalysisTask {
   name      String
   /// 任务状态 0未开始 1进行中 2已完成 3失败
   status    Int      @default(0)
+  /// 文件列表
+  files     String[]
   /// 任务备注
   remark    String   @default("")
   /// 创建者
@@ -18,7 +20,6 @@ model AnalysisTask {
   /// 工厂id
   factoryId Int
   factory   Factory  @relation(fields: [factoryId], references: [id], onDelete: Cascade)
-  files     String[]
   valves    Valve[]
   result    Json?
 }
