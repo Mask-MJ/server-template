@@ -32,7 +32,7 @@ export class PermissionsGuard implements CanActivate {
     const user: ActiveUserData = request[REQUEST_USER_KEY];
     const userInfo = await this.prisma.client.user.findUnique({
       where: { id: user.sub },
-      include: { roles: { include: { menus: { where: { type: 'B' } } } } },
+      include: { roles: { include: { menus: { where: { type: 'button' } } } } },
     });
 
     if (!userInfo) return false;

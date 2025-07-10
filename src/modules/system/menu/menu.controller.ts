@@ -28,11 +28,8 @@ export class MenuController {
   @Post()
   @Permissions('system:menu:create')
   @ApiOkResponse({ type: MenuEntity })
-  create(
-    @ActiveUser() user: ActiveUserData,
-    @Body() createMenuDto: CreateMenuDto,
-  ) {
-    return this.menuService.create(user, createMenuDto);
+  create(@Body() createMenuDto: CreateMenuDto) {
+    return this.menuService.create(createMenuDto);
   }
 
   /**
@@ -63,12 +60,8 @@ export class MenuController {
   @Patch(':id')
   @ApiOkResponse({ type: MenuEntity })
   @Permissions('system:menu:update')
-  update(
-    @Param('id') id: number,
-    @ActiveUser() user: ActiveUserData,
-    @Body() updateMenuDto: UpdateMenuDto,
-  ) {
-    return this.menuService.update(id, user, updateMenuDto);
+  update(@Param('id') id: number, @Body() updateMenuDto: UpdateMenuDto) {
+    return this.menuService.update(id, updateMenuDto);
   }
   /**
    * 删除菜单

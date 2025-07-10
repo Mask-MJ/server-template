@@ -1,3 +1,12 @@
+-- CreateEnum
+CREATE TYPE "MenuType" AS ENUM ('catalog', 'menu', 'embedded', 'link', 'button');
+
+-- CreateEnum
+CREATE TYPE "BadgeVariants" AS ENUM ('default', 'success', 'error', 'warning', 'info');
+
+-- CreateEnum
+CREATE TYPE "BadgeType" AS ENUM ('dot', 'normal');
+
 -- CreateTable
 CREATE TABLE "AnalysisTask" (
     "id" SERIAL NOT NULL,
@@ -134,16 +143,33 @@ CREATE TABLE "LoginLog" (
 -- CreateTable
 CREATE TABLE "Menu" (
     "id" SERIAL NOT NULL,
-    "name" TEXT,
+    "name" TEXT NOT NULL,
+    "title" TEXT,
     "path" TEXT,
-    "icon" TEXT NOT NULL DEFAULT '',
-    "activeIcon" TEXT NOT NULL DEFAULT '',
-    "type" TEXT NOT NULL,
-    "order" INTEGER NOT NULL DEFAULT 1,
-    "isCache" BOOLEAN NOT NULL DEFAULT true,
-    "visible" BOOLEAN NOT NULL DEFAULT true,
+    "icon" TEXT,
+    "activeIcon" TEXT,
+    "type" "MenuType" NOT NULL DEFAULT 'menu',
     "status" BOOLEAN NOT NULL DEFAULT true,
+    "activePath" TEXT,
+    "affixTab" BOOLEAN NOT NULL DEFAULT false,
+    "affixTabOrder" INTEGER NOT NULL DEFAULT 0,
+    "badge" TEXT,
+    "badgeType" "BadgeType",
+    "badgeVariants" "BadgeVariants",
+    "hideChildrenInMenu" BOOLEAN NOT NULL DEFAULT false,
+    "hideInBreadcrumb" BOOLEAN NOT NULL DEFAULT false,
+    "hideInMenu" BOOLEAN NOT NULL DEFAULT false,
+    "hideInTab" BOOLEAN NOT NULL DEFAULT false,
+    "iframeSrc" TEXT,
+    "link" TEXT,
+    "keepAlive" BOOLEAN NOT NULL DEFAULT false,
+    "maxNumOfOpenTabs" INTEGER,
+    "noBasicLayout" BOOLEAN NOT NULL DEFAULT false,
+    "openInNewWindow" BOOLEAN NOT NULL DEFAULT false,
+    "query" TEXT,
+    "redirect" TEXT,
     "permission" TEXT NOT NULL DEFAULT '',
+    "order" INTEGER NOT NULL DEFAULT 1,
     "createBy" TEXT,
     "updateBy" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
