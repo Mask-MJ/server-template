@@ -18,10 +18,23 @@ export class MinioService {
       secretKey: this.configService.get<string>('MINIO_SECRET_KEY'),
     });
   }
-
+  // 创建储存桶
+  async createBucket(
+    bucketName: string,
+    region: string = 'us-east-1',
+    makeOpts,
+  ) {
+    return await this.minioClient.makeBucket(bucketName, region, makeOpts);
+  }
+  // 检查储存桶是否存在
+  async bucketExists(bucketName: string) {
+    return await this.minioClient.bucketExists(bucketName);
+  }
+  // 上传文件
   async uploadFile(bucketName: string, objectName: string, data: Buffer) {
     await this.minioClient.putObject(bucketName, objectName, data);
   }
+  // 获取文件的URL
   getUrl(bucketName: string, objectName: string) {
     return this.minioClient.presignedGetObject(bucketName, objectName);
   }

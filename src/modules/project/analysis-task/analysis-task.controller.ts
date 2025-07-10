@@ -21,7 +21,7 @@ import { UploadDto } from '@/common/dto/base.dto';
 import { ApiPaginatedResponse } from '@/common/response/paginated.response';
 import { ActiveUser } from '@/modules/auth/decorators/active-user.decorator';
 import { ActiveUserData } from '@/modules/auth/interfaces/active-user-data.interface';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -75,12 +75,15 @@ export class AnalysisTaskController {
   /**
    * 上传PDF文件
    * */
-  @Post('uploadPdf')
+  @Post('uploadPdf/:id')
   @ApiConsumes('multipart/form-data')
   @ApiBody({ description: '上传PDF文件', type: UploadDto })
-  @UseInterceptors(FileInterceptor('files'))
-  upload(@UploadedFiles() files: Array<Express.Multer.File>) {
-    return this.analysisTaskService.upload(files);
+  @UseInterceptors(FilesInterceptor('files'))
+  upload(
+    @Param('id') id: number,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
+    return this.analysisTaskService.upload(id, files);
   }
 
   /**

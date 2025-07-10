@@ -13,19 +13,6 @@ export class UserService {
     @Inject(EventEmitter2) private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  // Exclude keys from user
-  // https://www.prisma.io/docs/orm/prisma-client/queries/excluding-fields
-  private exclude<User, Key extends keyof User>(
-    user: User,
-    keys: Key[],
-  ): Omit<User, Key> {
-    return Object.fromEntries(
-      Object.entries(user as Record<string, any>).filter(
-        ([key]) => !keys.includes(key as Key),
-      ),
-    ) as Omit<User, Key>;
-  }
-
   async create(createUserDto: CreateUserDto) {
     const existingUser = await this.prisma.client.user.findUnique({
       where: { username: createUserDto.username },
@@ -46,6 +33,7 @@ export class UserService {
   async findSelf(id: number) {
     return await this.prisma.client.user.findUniqueOrThrow({
       where: { id },
+      omit: { password: true },
       include: { roles: { include: { menus: true } } },
     });
   }
@@ -82,24 +70,19 @@ export class UserService {
           createdAt: { gte: beginTime, lte: endTime },
         },
         include: { roles: true },
+        omit: { password: true },
       })
       .withPages({ limit: pageSize, page, includePageCount: true });
 
-    return {
-      rows: rows.map((user) => this.exclude(user, ['password'])),
-      ...meta,
-    };
+    return { rows, ...meta };
   }
 
   async findOne(id: number) {
-    console.log(UserService.name);
-
-    const user = await this.prisma.client.user.findUniqueOrThrow({
+    return await this.prisma.client.user.findUniqueOrThrow({
       where: { id },
       include: { roles: true },
+      omit: { password: true },
     });
-    const userWithoutPassword = this.exclude(user, ['password']);
-    return userWithoutPassword;
   }
 
   async changePassword(id: number, password: string, oldPassword: string) {

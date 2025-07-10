@@ -14,7 +14,9 @@ import { HttpService } from '@nestjs/axios';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ActiveUserData } from '@/modules/auth/interfaces/active-user-data.interface';
 import { PrismaService } from '@/common/datebase/prisma.extension';
-import { UploadDto } from '@/common/dto/base.dto';
+import { firstValueFrom } from 'rxjs';
+import { transformPdfData } from './analysis-task.helper';
+import PDFParser from 'pdf2json';
 
 @Injectable()
 export class AnalysisTaskService {
@@ -53,6 +55,7 @@ export class AnalysisTaskService {
         where: { name: { contains: name, mode: 'insensitive' }, factoryId },
         include: { factory: true },
         orderBy: { createdAt: 'desc' },
+        omit: { result: true },
       })
       .withPages({ page, limit: pageSize, includePageCount: true });
     return { rows, ...meta };
@@ -61,6 +64,7 @@ export class AnalysisTaskService {
   async findOne(id: number) {
     return this.prisma.client.analysisTask.findUnique({
       where: { id },
+      omit: { result: true },
     });
   }
 
@@ -101,13 +105,28 @@ export class AnalysisTaskService {
     return '全部删除成功';
   }
 
-  async upload(files: Express.Multer.File[]) {
-    // 加上时间戳，避免文件名重复
-    const fileName = `${Date.now()}-${files.filename}`;
-    await this.minioClient.uploadFile('pdf', fileName, files.buffer);
-    const url = await this.minioClient.getUrl('pdf', fileName);
-    const urlWithoutParams = url.split('?')[0];
-    return { url: urlWithoutParams, name: fileName };
+  async upload(id: number, files: Express.Multer.File[]) {
+    // 检查储存桶是否存在
+    // const bucketName = `factory-${id}`;
+    // const bucketExists = await this.minioClient.bucketExists(bucketName);
+    // if (!bucketExists) {
+    //   await this.minioClient.createBucket(bucketName, 'us-east-1', {});
+    // }
+    const bucketName = 'pdf';
+    const result = await Promise.all(
+      files.map(async (file) => {
+        const buffer = Buffer.from(file.originalname, 'latin1');
+        // 加上时间戳，避免文件名重复
+        const fileName = `${Date.now()}-${id}-${buffer.toString('utf8')}`;
+        await this.minioClient.uploadFile(bucketName, fileName, file.buffer);
+        const url = await this.minioClient.getUrl(bucketName, fileName);
+        const urlWithoutParams = decodeURIComponent(url.split('?')[0]);
+        return urlWithoutParams;
+      }),
+    ).catch((error) => {
+      throw new InternalServerErrorException('文件上传失败', error);
+    });
+    return result;
   }
 
   async result(id: number) {
@@ -133,7 +152,33 @@ export class AnalysisTaskService {
         where: { id },
         data: { status: 1 },
       });
-      console.log('开始执行分析任务', analysisTask);
+      await Promise.all(
+        analysisTask.files.map(async (fileUrl) => {
+          const { data } = await firstValueFrom(
+            this.httpService.get(fileUrl, { responseType: 'arraybuffer' }),
+          );
+
+          const pdfParser = new PDFParser(this, true);
+          pdfParser.on('pdfParser_dataReady', (pdfData) => {
+            const texts = pdfData.Pages.reduce((acc: string[], page) => {
+              const pageTexts = page.Texts.map((text) =>
+                decodeURIComponent(text.R[0].T),
+              );
+              return [...acc, ...pageTexts];
+            }, []);
+
+            transformPdfData(texts);
+          });
+          pdfParser.on('pdfParser_dataError', (errData) => {
+            console.error('PDF解析错误', errData);
+          });
+
+          pdfParser.parseBuffer(data);
+        }),
+      ).catch((error) => {
+        throw new InternalServerErrorException('PDF解析失败', error);
+      });
+
       await this.prisma.client.analysisTask.update({
         where: { id },
         data: { status: 2 },
@@ -144,6 +189,7 @@ export class AnalysisTaskService {
         where: { id },
         data: { status: 3 },
       });
+      console.error('分析任务执行失败', error);
       throw new InternalServerErrorException('分析任务执行失败', error);
     }
   }
