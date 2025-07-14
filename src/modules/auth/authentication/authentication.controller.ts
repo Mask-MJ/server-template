@@ -33,6 +33,7 @@ export class AuthenticationController {
    * 刷新令牌
    */
   @Post('refresh-token')
+  @ApiOkResponse({ type: SignInEntity })
   refreshTokens(@Body() refreshTokenDto: RefreshTokenDto) {
     return this.authenticationService.refreshTokens(refreshTokenDto);
   }
