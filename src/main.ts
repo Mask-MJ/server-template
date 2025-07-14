@@ -1,4 +1,4 @@
-import helmet from 'helmet';
+// import helmet from 'helmet';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
@@ -53,7 +53,7 @@ async function bootstrap() {
     app.enableVersioning({ type: VersioningType.URI, defaultVersion });
   }
   // 安全处理
-  app.use(helmet());
+  // app.use(helmet());
   const swaggerOptions = new DocumentBuilder()
     .setTitle(`${NAME} 接口文档`)
     .setDescription(`The ${NAME} API escription`)
