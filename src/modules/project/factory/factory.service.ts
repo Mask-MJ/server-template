@@ -90,6 +90,7 @@ export class FactoryService {
       }
       xlsx
         .filter((item: Valve & { unit: string }) => item.unit === unitName)
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         .forEach(async (item: Valve) => {
           const valve = await this.prisma.client.valve.findFirst({
             where: { tag: item.tag, unitId: unit.id },

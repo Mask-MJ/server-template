@@ -64,10 +64,15 @@ model Menu {
 }
 
 enum MenuType {
+  // 目录
   catalog
+  // 菜单
   menu
+  // 嵌入式
   embedded
+  // 链接
   link
+  // 按钮
   button
 }
 
