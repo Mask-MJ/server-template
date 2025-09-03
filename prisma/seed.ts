@@ -157,64 +157,50 @@ async function main() {
           },
           {
             name: '字典管理',
-            title: 'system.dictType',
+            title: 'system.dict',
             icon: 'i-ant-design:medicine-box-outlined',
             order: 4,
             type: 'menu',
-            path: '/system/dictType',
+            path: '/system/dict',
             children: {
               create: [
                 {
-                  name: '创建',
+                  name: '创建字典',
                   type: 'button',
                   permission: 'system:dictType:create',
                 },
                 {
-                  name: '查询',
+                  name: '查询字典',
                   type: 'button',
                   permission: 'system:dictType:query',
                 },
                 {
-                  name: '修改',
+                  name: '修改字典',
                   type: 'button',
                   permission: 'system:dictType:update',
                 },
                 {
-                  name: '删除',
+                  name: '删除字典',
                   type: 'button',
                   permission: 'system:dictType:delete',
                 },
-              ],
-            },
-          },
-          {
-            name: '字典数据',
-            title: 'system.dictData',
-            icon: 'i-ant-design:medicine-box-outlined',
-            order: 5,
-            type: 'menu',
-            path: '/system/dictData/:id',
-            hideInBreadcrumb: true,
-            hideInMenu: true,
-            children: {
-              create: [
                 {
-                  name: '创建',
+                  name: '创建字典数据',
                   type: 'button',
                   permission: 'system:dictData:create',
                 },
                 {
-                  name: '查询',
+                  name: '查询字典数据',
                   type: 'button',
                   permission: 'system:dictData:query',
                 },
                 {
-                  name: '修改',
+                  name: '修改字典数据',
                   type: 'button',
                   permission: 'system:dictData:update',
                 },
                 {
-                  name: '删除',
+                  name: '删除字典数据',
                   type: 'button',
                   permission: 'system:dictData:delete',
                 },
@@ -256,7 +242,7 @@ async function main() {
           {
             name: '岗位管理',
             title: 'system.post',
-            icon: 'i-ant-design:golden-filled',
+            icon: 'i-ant-design:deployment-unit-outlined',
             order: 7,
             type: 'menu',
             path: '/system/post',
@@ -281,6 +267,82 @@ async function main() {
                   name: '删除',
                   type: 'button',
                   permission: 'system:post:delete',
+                },
+              ],
+            },
+          },
+          {
+            name: '知识库管理',
+            title: 'system.knowledgeBase',
+            icon: 'i-ant-design:database-outlined',
+            order: 7,
+            type: 'menu',
+            path: '/system/knowledgeBase',
+            children: {
+              create: [
+                {
+                  name: '创建',
+                  type: 'button',
+                  permission: 'system:knowledgeBase:create',
+                },
+                {
+                  name: '查询',
+                  type: 'button',
+                  permission: 'system:knowledgeBase:query',
+                },
+                {
+                  name: '修改',
+                  type: 'button',
+                  permission: 'system:knowledgeBase:update',
+                },
+                {
+                  name: '删除',
+                  type: 'button',
+                  permission: 'system:knowledgeBase:delete',
+                },
+              ],
+            },
+          },
+          {
+            name: '文件管理',
+            title: 'system.document',
+            icon: 'i-ant-design:database-outlined',
+            order: 7,
+            type: 'menu',
+            path: '/system/document/:id',
+            hideInBreadcrumb: true,
+            hideInMenu: true,
+            children: {
+              create: [
+                {
+                  name: '上传文件',
+                  type: 'button',
+                  permission: 'system:document:upload',
+                },
+                {
+                  name: '解析文件',
+                  type: 'button',
+                  permission: 'system:document:parse',
+                },
+                {
+                  name: '查询文件列表',
+                  type: 'button',
+                  permission: 'system:document:query',
+                },
+                {
+                  name: '修改文件',
+                  type: 'button',
+                  permission: 'system:document:update',
+                },
+                {
+                  name: '删除文件',
+                  type: 'button',
+                  permission: 'system:document:delete',
+                },
+                {
+                  name: '下载文件',
+                  type: 'button',
+                  permission: 'system:document:download',
                 },
               ],
             },
