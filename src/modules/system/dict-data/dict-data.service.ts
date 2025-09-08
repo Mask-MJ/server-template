@@ -20,8 +20,8 @@ export class DictDataService {
   }
 
   async findAll(queryDictDataDto: QueryDictDataDto) {
-    const { name, value, dictTypeId, page, pageSize } = queryDictDataDto;
-    const [rows, meta] = await this.prisma.client.dictData
+    const { name, value, dictTypeId, current, pageSize } = queryDictDataDto;
+    const [list, meta] = await this.prisma.client.dictData
       .paginate({
         where: {
           name: { contains: name },
@@ -30,8 +30,8 @@ export class DictDataService {
         },
         orderBy: { order: 'asc' },
       })
-      .withPages({ page, limit: pageSize, includePageCount: true });
-    return { rows, ...meta };
+      .withPages({ page: current, limit: pageSize, includePageCount: true });
+    return { list, ...meta };
   }
 
   async findOne(id: number) {

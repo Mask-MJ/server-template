@@ -18,15 +18,15 @@ export class UnitService {
   }
 
   async findAll(queryUnitDto: QueryUnitDto) {
-    const { name, factoryId, page, pageSize } = queryUnitDto;
-    const [rows, meta] = await this.prisma.client.unit
+    const { name, factoryId, current, pageSize } = queryUnitDto;
+    const [list, meta] = await this.prisma.client.unit
       .paginate({
         where: { name: { contains: name }, factoryId: factoryId },
         include: { factories: true },
         orderBy: { createdAt: 'desc' },
       })
-      .withPages({ page, limit: pageSize, includePageCount: true });
-    return { rows, ...meta };
+      .withPages({ page: current, limit: pageSize, includePageCount: true });
+    return { list, ...meta };
   }
 
   async findOne(id: number) {

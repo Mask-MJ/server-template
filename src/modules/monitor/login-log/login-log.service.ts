@@ -21,8 +21,9 @@ export class LoginLogService {
   }
 
   async findAll(queryLoginlogDto: QueryLoginLogDto) {
-    const { page, pageSize, beginTime, endTime, username } = queryLoginlogDto;
-    const [rows, meta] = await this.prisma.client.loginLog
+    const { current, pageSize, beginTime, endTime, username } =
+      queryLoginlogDto;
+    const [list, meta] = await this.prisma.client.loginLog
       .paginate({
         where: {
           username: { contains: username },
@@ -30,9 +31,9 @@ export class LoginLogService {
         },
         orderBy: { createdAt: 'desc' },
       })
-      .withPages({ limit: pageSize, page, includePageCount: true });
+      .withPages({ limit: pageSize, page: current, includePageCount: true });
 
-    return { rows, ...meta };
+    return { list, ...meta };
   }
 
   async findOne(id: number) {

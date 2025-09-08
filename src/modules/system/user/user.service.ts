@@ -55,12 +55,12 @@ export class UserService {
       nickname,
       email,
       phoneNumber,
-      page,
+      current,
       pageSize,
       beginTime,
       endTime,
     } = queryUserDto;
-    const [rows, meta] = await this.prisma.client.user
+    const [list, meta] = await this.prisma.client.user
       .paginate({
         where: {
           username: { contains: username, mode: 'insensitive' },
@@ -69,12 +69,16 @@ export class UserService {
           phoneNumber: { contains: phoneNumber, mode: 'insensitive' },
           createdAt: { gte: beginTime, lte: endTime },
         },
-        include: { roles: true },
+        include: {
+          roles: {
+            select: { id: true, name: true },
+          },
+        },
         omit: { password: true },
       })
-      .withPages({ limit: pageSize, page, includePageCount: true });
+      .withPages({ limit: pageSize, page: current, includePageCount: true });
 
-    return { rows, ...meta };
+    return { list, ...meta };
   }
 
   async findOne(id: number) {

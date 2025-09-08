@@ -4,7 +4,7 @@ import { PaginateDto } from '../dto/base.dto';
 
 class PaginateResponse<TData> extends PaginateDto {
   total: number;
-  rows: TData[];
+  list: TData[];
 }
 
 export const ApiPaginatedResponse = <TModel extends Type<any>>(
@@ -19,9 +19,14 @@ export const ApiPaginatedResponse = <TModel extends Type<any>>(
           { $ref: getSchemaPath(PaginateResponse) },
           {
             properties: {
-              rows: {
+              total: {
+                type: 'number',
+                default: 0,
+              },
+              list: {
                 type: 'array',
                 items: { $ref: getSchemaPath(model) },
+                default: [],
               },
             },
           },

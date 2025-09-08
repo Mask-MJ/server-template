@@ -20,5 +20,6 @@ export class UserEntity implements User {
   createdAt: Date;
   updatedAt: Date;
   remark: string;
-  role: RoleEntity[];
+  roles: RoleEntity[];
+  roleIds: number[];
 }

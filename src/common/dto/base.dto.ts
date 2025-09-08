@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsPositive } from 'class-validator';
 import { ApiProperty, IntersectionType } from '@nestjs/swagger';
 
 export class PaginateDto {
@@ -8,13 +8,17 @@ export class PaginateDto {
    * @example 1
    */
   @IsNumber()
-  page: number = 1;
+  @IsPositive()
+  @Type(() => Number)
+  current: number = 1;
 
   /**
    * 每页数量
    * @example 10
    */
   @IsNumber()
+  @IsPositive()
+  @Type(() => Number)
   pageSize: number = 10;
 }
 

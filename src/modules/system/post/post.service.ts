@@ -16,8 +16,8 @@ export class PostService {
   }
 
   async findAll(queryPostDto: QueryPostDto) {
-    const { name, code, page, pageSize } = queryPostDto;
-    const [rows, meta] = await this.prisma.client.post
+    const { name, code, current, pageSize } = queryPostDto;
+    const [list, meta] = await this.prisma.client.post
       .paginate({
         where: {
           name: { contains: name, mode: 'insensitive' },
@@ -25,8 +25,8 @@ export class PostService {
         },
         orderBy: { order: 'asc' },
       })
-      .withPages({ page, limit: pageSize, includePageCount: true });
-    return { rows, ...meta };
+      .withPages({ page: current, limit: pageSize, includePageCount: true });
+    return { list, ...meta };
   }
 
   async findOne(id: number) {

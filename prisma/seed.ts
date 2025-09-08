@@ -17,6 +17,14 @@ async function main() {
       roles: { connect: { value: 'admin' } },
     },
   });
+  await prisma.user.create({
+    data: {
+      username: 'user',
+      password: '$2b$10$kxYSbbQSzJ64r4EIcORm8umQB7GQRLNxWAKHmJalYMzkgRZbAaIDq',
+      nickname: '用户',
+      roles: { connect: { value: 'common' } },
+    },
+  });
   // 工作台
   await prisma.menu.create({
     data: {
@@ -61,7 +69,7 @@ async function main() {
         create: [
           {
             name: '用户管理',
-            title: 'system.user',
+            title: 'system.user.title',
             icon: 'i-ant-design:user-outlined',
             order: 1,
             type: 'menu',
@@ -93,7 +101,7 @@ async function main() {
           },
           {
             name: '角色管理',
-            title: 'system.role',
+            title: 'system.role.title',
             icon: 'i-ant-design:usergroup-add-outlined',
             order: 2,
             type: 'menu',
@@ -125,7 +133,7 @@ async function main() {
           },
           {
             name: '菜单管理',
-            title: 'system.menu',
+            title: 'system.menu.title',
             icon: 'i-ant-design:menu-outlined',
             order: 3,
             type: 'menu',
@@ -157,7 +165,7 @@ async function main() {
           },
           {
             name: '字典管理',
-            title: 'system.dict',
+            title: 'system.dict.title',
             icon: 'i-ant-design:medicine-box-outlined',
             order: 4,
             type: 'menu',
@@ -209,7 +217,7 @@ async function main() {
           },
           {
             name: '部门管理',
-            title: 'system.dept',
+            title: 'system.dept.title',
             icon: 'i-ant-design:gold-twotone',
             order: 6,
             type: 'menu',
@@ -241,7 +249,7 @@ async function main() {
           },
           {
             name: '岗位管理',
-            title: 'system.post',
+            title: 'system.post.title',
             icon: 'i-ant-design:deployment-unit-outlined',
             order: 7,
             type: 'menu',
@@ -273,7 +281,7 @@ async function main() {
           },
           {
             name: '知识库管理',
-            title: 'system.knowledgeBase',
+            title: 'system.knowledgeBase.title',
             icon: 'i-ant-design:database-outlined',
             order: 7,
             type: 'menu',
@@ -305,8 +313,8 @@ async function main() {
           },
           {
             name: '文件管理',
-            title: 'system.document',
-            icon: 'i-ant-design:database-outlined',
+            title: 'system.document.title',
+            icon: 'i-ant-design:container-outlined',
             order: 7,
             type: 'menu',
             path: '/system/document/:id',
@@ -364,7 +372,7 @@ async function main() {
         create: [
           {
             name: '在线用户',
-            title: 'monitor.online',
+            title: 'monitor.online.title',
             icon: 'i-ant-design:aim-outlined',
             order: 1,
             type: 'menu',
@@ -386,7 +394,7 @@ async function main() {
           },
           {
             name: '登录日志',
-            title: 'monitor.loginLog',
+            title: 'monitor.loginLog.title',
             order: 2,
             icon: 'i-ant-design:contacts-outlined',
             type: 'menu',
@@ -403,7 +411,7 @@ async function main() {
           },
           {
             name: '操作日志',
-            title: 'monitor.operationLog',
+            title: 'monitor.operationLog.title',
             order: 3,
             icon: 'i-ant-design:cloud-server-outlined',
             type: 'menu',
@@ -420,7 +428,7 @@ async function main() {
           },
           {
             name: '服务器监控',
-            title: 'monitor.info',
+            title: 'monitor.info.title',
             icon: 'i-ant-design:fund-projection-screen-outlined',
             order: 4,
             path: '/monitor/info',
@@ -439,6 +447,32 @@ async function main() {
       },
     },
   });
+  await prisma.dictType.create({
+    data: {
+      name: '用户性别',
+      value: 'sex',
+      dictData: {
+        create: [
+          { name: '男', value: '0', order: 1, createBy: 'system' },
+          { name: '女', value: '1', order: 2, createBy: 'system' },
+          { name: '未知', value: '2', order: 3, createBy: 'system' },
+        ],
+      },
+    },
+  });
+  await prisma.dictType.create({
+    data: {
+      name: '状态',
+      value: 'status',
+      dictData: {
+        create: [
+          { name: '启用', value: '1', order: 1, createBy: 'system' },
+          { name: '禁用', value: '0', order: 2, createBy: 'system' },
+        ],
+      },
+    },
+  });
+
   console.log('注入数据成功');
 }
 main().catch(async (e) => {

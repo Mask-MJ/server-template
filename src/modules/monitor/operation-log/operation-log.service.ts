@@ -24,9 +24,9 @@ export class OperationLogService {
   }
 
   async findAll(queryOperationLogDto: QueryOperationLogDto) {
-    const { page, pageSize, beginTime, endTime, username, businessType } =
+    const { current, pageSize, beginTime, endTime, username, businessType } =
       queryOperationLogDto;
-    const [rows, meta] = await this.prisma.client.operationLog
+    const [list, meta] = await this.prisma.client.operationLog
       .paginate({
         where: {
           username: { contains: username },
@@ -35,9 +35,9 @@ export class OperationLogService {
         },
         orderBy: { createdAt: 'desc' },
       })
-      .withPages({ limit: pageSize, page, includePageCount: true });
+      .withPages({ limit: pageSize, page: current, includePageCount: true });
 
-    return { rows, ...meta };
+    return { list, ...meta };
   }
 
   async findOne(id: number) {

@@ -21,8 +21,8 @@ export class RoleService {
   }
 
   async findAll(queryRoleDto: QueryRoleDto) {
-    const { name, value, page, pageSize } = queryRoleDto;
-    const [rows, meta] = await this.prisma.client.role
+    const { name, value, current, pageSize } = queryRoleDto;
+    const [list, meta] = await this.prisma.client.role
       .paginate({
         where: {
           name: { contains: name, mode: 'insensitive' },
@@ -30,8 +30,8 @@ export class RoleService {
         },
         orderBy: { order: 'asc' },
       })
-      .withPages({ page, limit: pageSize, includePageCount: true });
-    return { rows, ...meta };
+      .withPages({ page: current, limit: pageSize, includePageCount: true });
+    return { list, ...meta };
   }
 
   async findOne(id: number) {

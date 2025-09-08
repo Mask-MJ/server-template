@@ -20,16 +20,16 @@ export class DictTypeService {
   }
 
   async findAll(queryDictTypeDto: QueryDictTypeDto) {
-    const { name, value, page, pageSize } = queryDictTypeDto;
-    const [rows, meta] = await this.prisma.client.dictType
+    const { name, value, current, pageSize } = queryDictTypeDto;
+    const [list, meta] = await this.prisma.client.dictType
       .paginate({
         where: {
           name: { contains: name, mode: 'insensitive' },
           value: { contains: value, mode: 'insensitive' },
         },
       })
-      .withPages({ page, limit: pageSize, includePageCount: true });
-    return { rows, ...meta };
+      .withPages({ page: current, limit: pageSize, includePageCount: true });
+    return { list, ...meta };
   }
 
   async findOne(id: number) {

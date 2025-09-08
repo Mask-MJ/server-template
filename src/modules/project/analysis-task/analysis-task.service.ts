@@ -49,16 +49,16 @@ export class AnalysisTaskService {
   }
 
   async findAll(queryAnalysisTaskDto: QueryAnalysisTaskDto) {
-    const { name, factoryId, page, pageSize } = queryAnalysisTaskDto;
-    const [rows, meta] = await this.prisma.client.analysisTask
+    const { name, factoryId, current, pageSize } = queryAnalysisTaskDto;
+    const [list, meta] = await this.prisma.client.analysisTask
       .paginate({
         where: { name: { contains: name, mode: 'insensitive' }, factoryId },
         include: { factory: true },
         orderBy: { createdAt: 'desc' },
         omit: { result: true },
       })
-      .withPages({ page, limit: pageSize, includePageCount: true });
-    return { rows, ...meta };
+      .withPages({ page: current, limit: pageSize, includePageCount: true });
+    return { list, ...meta };
   }
 
   async findOne(id: number) {
