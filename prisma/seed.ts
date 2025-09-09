@@ -175,22 +175,22 @@ async function main() {
                 {
                   name: '创建字典',
                   type: 'button',
-                  permission: 'system:dictType:create',
+                  permission: 'system:dict:create',
                 },
                 {
                   name: '查询字典',
                   type: 'button',
-                  permission: 'system:dictType:query',
+                  permission: 'system:dict:query',
                 },
                 {
                   name: '修改字典',
                   type: 'button',
-                  permission: 'system:dictType:update',
+                  permission: 'system:dict:update',
                 },
                 {
                   name: '删除字典',
                   type: 'button',
-                  permission: 'system:dictType:delete',
+                  permission: 'system:dict:delete',
                 },
                 {
                   name: '创建字典数据',
@@ -447,7 +447,7 @@ async function main() {
       },
     },
   });
-  await prisma.dictType.create({
+  await prisma.dict.create({
     data: {
       name: '用户性别',
       value: 'sex',
@@ -460,7 +460,7 @@ async function main() {
       },
     },
   });
-  await prisma.dictType.create({
+  await prisma.dict.create({
     data: {
       name: '状态',
       value: 'status',

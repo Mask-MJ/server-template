@@ -12,13 +12,13 @@ CREATE TABLE "AnalysisTask" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "status" INTEGER NOT NULL DEFAULT 0,
+    "files" TEXT[],
     "remark" TEXT NOT NULL DEFAULT '',
     "createBy" TEXT,
     "updateBy" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "factoryId" INTEGER NOT NULL,
-    "files" TEXT[],
     "result" JSONB,
 
     CONSTRAINT "AnalysisTask_pkey" PRIMARY KEY ("id")
@@ -42,7 +42,7 @@ CREATE TABLE "Dept" (
 );
 
 -- CreateTable
-CREATE TABLE "DictType" (
+CREATE TABLE "Dict" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "value" TEXT NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE "DictType" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "remark" TEXT NOT NULL DEFAULT '',
 
-    CONSTRAINT "DictType_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Dict_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -67,7 +67,7 @@ CREATE TABLE "DictData" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "remark" TEXT NOT NULL DEFAULT '',
-    "dictTypeId" INTEGER NOT NULL,
+    "dictId" INTEGER NOT NULL,
 
     CONSTRAINT "DictData_pkey" PRIMARY KEY ("id")
 );
@@ -145,7 +145,7 @@ CREATE TABLE "Menu" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "title" TEXT,
-    "path" TEXT,
+    "path" TEXT NOT NULL DEFAULT '',
     "icon" TEXT,
     "activeIcon" TEXT,
     "type" "MenuType" NOT NULL DEFAULT 'menu',
@@ -170,11 +170,6 @@ CREATE TABLE "Menu" (
     "redirect" TEXT,
     "permission" TEXT NOT NULL DEFAULT '',
     "order" INTEGER NOT NULL DEFAULT 1,
-    "createBy" TEXT,
-    "updateBy" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "remark" TEXT NOT NULL DEFAULT '',
     "parentId" INTEGER,
 
     CONSTRAINT "Menu_pkey" PRIMARY KEY ("id")
@@ -392,6 +387,9 @@ CREATE TABLE "_ValveToWorkOrder" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Dict_name_key" ON "Dict"("name");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Factory_name_key" ON "Factory"("name");
 
 -- CreateIndex
@@ -440,7 +438,7 @@ ALTER TABLE "AnalysisTask" ADD CONSTRAINT "AnalysisTask_factoryId_fkey" FOREIGN 
 ALTER TABLE "Dept" ADD CONSTRAINT "Dept_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "Dept"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "DictData" ADD CONSTRAINT "DictData_dictTypeId_fkey" FOREIGN KEY ("dictTypeId") REFERENCES "DictType"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "DictData" ADD CONSTRAINT "DictData_dictId_fkey" FOREIGN KEY ("dictId") REFERENCES "Dict"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Factory" ADD CONSTRAINT "Factory_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "Factory"("id") ON DELETE CASCADE ON UPDATE CASCADE;

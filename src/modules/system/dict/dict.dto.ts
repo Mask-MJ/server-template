@@ -1,7 +1,46 @@
 import { IntersectionType, PartialType, PickType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsString, IsOptional, IsNumber, IsBoolean } from 'class-validator';
-import { BaseDto } from 'src/common/dto/base.dto';
+
+export class CreateDictDto {
+  /**
+   * 字典名称
+   * @example '性别'
+   */
+  @IsString()
+  name: string;
+
+  /**
+   * 字典值
+   * @example '1'
+   */
+  @IsString()
+  value: string;
+
+  /**
+   * 状态
+   * @example true
+   */
+  @IsOptional()
+  @IsBoolean()
+  status?: boolean;
+
+  /**
+   * 备注
+   * @example '备注'
+   */
+  @IsString()
+  @IsOptional()
+  remark?: string;
+}
+export class QueryDictDto extends PartialType(
+  IntersectionType(PickType(CreateDictDto, ['name', 'value'])),
+) {}
+
+export class UpdateDictDto extends PartialType(CreateDictDto) {
+  @IsNumber()
+  id: number;
+}
 
 export class CreateDictDataDto {
   /**
@@ -27,14 +66,6 @@ export class CreateDictDataDto {
   order?: number;
 
   /**
-   * 类型 0: 配置 1: 参数 2: 诊断
-   * @example '0'
-   */
-  @IsString()
-  @IsOptional()
-  type?: string;
-
-  /**
    * 状态 false: 禁用 true: 启用
    * @example true
    */
@@ -44,12 +75,12 @@ export class CreateDictDataDto {
   status?: boolean = true;
 
   /**
-   * 字典类型ID
+   * 字典ID
    * @example 1
    */
   @IsNumber()
   @Type(() => Number)
-  dictTypeId: number;
+  dictId: number;
 
   /**
    * 备注
@@ -58,30 +89,18 @@ export class CreateDictDataDto {
   @IsString()
   @IsOptional()
   remark?: string;
-
-  /**
-   * 父级菜单id
-   * @example 0
-   */
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  parentId?: number;
 }
 
 export class QueryDictDataDto extends PartialType(
-  IntersectionType(
-    PickType(CreateDictDataDto, ['name', 'value', 'dictTypeId']),
-    BaseDto,
-  ),
+  IntersectionType(PickType(CreateDictDataDto, ['name', 'value', 'dictId'])),
 ) {
   /**
-   * 字典类型值
-   * @example 'chart'
+   * 字典名称
+   * @example '性别'
    */
   @IsString()
   @IsOptional()
-  dictTypeValue?: string;
+  dictName?: string;
 }
 
 export class UpdateDictDataDto extends PartialType(CreateDictDataDto) {

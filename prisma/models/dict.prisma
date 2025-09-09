@@ -1,11 +1,13 @@
 /// 字典类型表
-model DictType {
+model Dict {
   /// 字典类型ID
   id        Int        @id @default(autoincrement())
   /// 字典名称
-  name      String
+  name      String     @unique
   /// 字典键值
   value     String
+  /// 状态
+  status    Boolean    @default(true)
   /// 创建者
   createBy  String?
   /// 更新者
@@ -22,25 +24,25 @@ model DictType {
 /// 字典数据表
 model DictData {
   /// 数据ID
-  id         Int      @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   /// 数据名称
-  name       String
+  name      String
   /// 数据键值
-  value      String
+  value     String
   /// 数据排序
-  order      Int      @default(1)
+  order     Int      @default(1)
   /// 状态
-  status     Boolean  @default(true)
+  status    Boolean  @default(true)
   /// 创建者
-  createBy   String
+  createBy  String
   /// 更新者
-  updateBy   String?
+  updateBy  String?
   /// 创建时间
-  createdAt  DateTime @default(now())
+  createdAt DateTime @default(now())
   /// 更新时间
-  updatedAt  DateTime @updatedAt
+  updatedAt DateTime @updatedAt
   /// 备注
-  remark     String   @default("")
-  dictTypeId Int
-  dictType   DictType @relation(fields: [dictTypeId], references: [id], onDelete: Cascade)
+  remark    String   @default("")
+  dictId    Int
+  dict      Dict     @relation(fields: [dictId], references: [id], onDelete: Cascade)
 }

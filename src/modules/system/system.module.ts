@@ -7,14 +7,12 @@ import { UserService } from './user/user.service';
 import { BcryptService } from '../auth/hashing/bcrypt.service';
 import { HashingService } from '../auth/hashing/hashing.service';
 import { DeptController } from './dept/dept.controller';
-import { DictDataController } from './dict-data/dict-data.controller';
-import { DictTypeController } from './dict-type/dict-type.controller';
+import { DictController } from './dict/dict.controller';
 import { MenuController } from './menu/menu.controller';
 import { PostController } from './post/post.controller';
 import { RoleController } from './role/role.controller';
 import { DeptService } from './dept/dept.service';
-import { DictDataService } from './dict-data/dict-data.service';
-import { DictTypeService } from './dict-type/dict-type.service';
+import { DictService } from './dict/dict.service';
 import { MenuService } from './menu/menu.service';
 import { PostService } from './post/post.service';
 import { RoleService } from './role/role.service';
@@ -27,8 +25,7 @@ import { RoleService } from './role/role.service';
   controllers: [
     UserController,
     DeptController,
-    DictDataController,
-    DictTypeController,
+    DictController,
     MenuController,
     RoleController,
     PostController,
@@ -37,8 +34,7 @@ import { RoleService } from './role/role.service';
     { provide: HashingService, useClass: BcryptService },
     UserService,
     DeptService,
-    DictDataService,
-    DictTypeService,
+    DictService,
     MenuService,
     RoleService,
     PostService,
