@@ -51,7 +51,7 @@ export class CreateMenuDto {
    */
   @IsString()
   @IsOptional()
-  actionIcon?: string;
+  activeIcon?: string;
 
   /**
    * 菜单类别
@@ -258,7 +258,10 @@ export class QueryMenuDto extends PartialType(
   IntersectionType(PickType(CreateMenuDto, ['name', 'path'])),
 ) {}
 
-export class UpdateMenuDto extends PartialType(CreateMenuDto) {
+export class UpdateMenuDto extends IntersectionType(
+  PartialType(CreateMenuDto),
+  PickType(CreateMenuDto, ['name', 'path', 'type']),
+) {
   @IsNumber()
   id: number;
 }
