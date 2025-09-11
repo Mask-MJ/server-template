@@ -52,7 +52,6 @@ export class DictController {
    */
   @Get()
   @ApiOkResponse({ type: DictEntity, isArray: true })
-  @Permissions('system:dict:query')
   findAll(@Query() queryDictDto: QueryDictDto) {
     return this.dictService.findAll(queryDictDto);
   }
@@ -74,7 +73,6 @@ export class DictController {
    */
   @Get('data')
   @ApiOkResponse({ type: DictDataEntity, isArray: true })
-  @Permissions('system:dictData:query')
   findAllData(@Query() queryDictDataDto: QueryDictDataDto) {
     return this.dictService.findAllData(queryDictDataDto);
   }
@@ -84,7 +82,6 @@ export class DictController {
    */
   @Get('data/:id')
   @ApiOkResponse({ type: DictDataEntity })
-  @Permissions('system:dictData:query')
   findOneData(@Param('id') id: number) {
     return this.dictService.findOneData(id);
   }
@@ -117,7 +114,6 @@ export class DictController {
    */
   @Get(':id')
   @ApiOkResponse({ type: DictEntity })
-  @Permissions('system:dict:query')
   findOne(@Param('id') id: number) {
     return this.dictService.findOne(id);
   }

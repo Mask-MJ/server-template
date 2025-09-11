@@ -36,7 +36,6 @@ export class MenuController {
    * 获取菜单列表
    */
   @Get()
-  @Permissions('system:menu:query')
   @ApiOkResponse({ type: MenuEntity, isArray: true })
   findAll(
     @ActiveUser() user: ActiveUserData,
@@ -50,7 +49,6 @@ export class MenuController {
    */
   @Get(':id')
   @ApiOkResponse({ type: MenuEntity })
-  @Permissions('system:menu:query')
   findOne(@Param('id') id: number) {
     return this.menuService.findOne(id);
   }

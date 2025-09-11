@@ -77,22 +77,17 @@ async function main() {
             children: {
               create: [
                 {
-                  name: '创建',
+                  name: '创建用户',
                   type: 'button',
                   permission: 'system:user:create',
                 },
                 {
-                  name: '查询',
-                  type: 'button',
-                  permission: 'system:user:query',
-                },
-                {
-                  name: '修改',
+                  name: '修改用户',
                   type: 'button',
                   permission: 'system:user:update',
                 },
                 {
-                  name: '删除',
+                  name: '删除用户',
                   type: 'button',
                   permission: 'system:user:delete',
                 },
@@ -109,22 +104,17 @@ async function main() {
             children: {
               create: [
                 {
-                  name: '创建',
+                  name: '创建角色',
                   type: 'button',
                   permission: 'system:role:create',
                 },
                 {
-                  name: '查询',
-                  type: 'button',
-                  permission: 'system:role:query',
-                },
-                {
-                  name: '修改',
+                  name: '修改角色',
                   type: 'button',
                   permission: 'system:role:update',
                 },
                 {
-                  name: '删除',
+                  name: '删除角色',
                   type: 'button',
                   permission: 'system:role:delete',
                 },
@@ -141,22 +131,17 @@ async function main() {
             children: {
               create: [
                 {
-                  name: '创建',
+                  name: '创建菜单',
                   type: 'button',
                   permission: 'system:menu:create',
                 },
                 {
-                  name: '查询',
-                  type: 'button',
-                  permission: 'system:menu:query',
-                },
-                {
-                  name: '修改',
+                  name: '修改菜单',
                   type: 'button',
                   permission: 'system:menu:update',
                 },
                 {
-                  name: '删除',
+                  name: '删除菜单',
                   type: 'button',
                   permission: 'system:menu:delete',
                 },
@@ -178,11 +163,6 @@ async function main() {
                   permission: 'system:dict:create',
                 },
                 {
-                  name: '查询字典',
-                  type: 'button',
-                  permission: 'system:dict:query',
-                },
-                {
                   name: '修改字典',
                   type: 'button',
                   permission: 'system:dict:update',
@@ -196,11 +176,6 @@ async function main() {
                   name: '创建字典数据',
                   type: 'button',
                   permission: 'system:dictData:create',
-                },
-                {
-                  name: '查询字典数据',
-                  type: 'button',
-                  permission: 'system:dictData:query',
                 },
                 {
                   name: '修改字典数据',
@@ -225,22 +200,17 @@ async function main() {
             children: {
               create: [
                 {
-                  name: '创建',
+                  name: '创建部门',
                   type: 'button',
                   permission: 'system:dept:create',
                 },
                 {
-                  name: '查询',
-                  type: 'button',
-                  permission: 'system:dept:query',
-                },
-                {
-                  name: '修改',
+                  name: '修改部门',
                   type: 'button',
                   permission: 'system:dept:update',
                 },
                 {
-                  name: '删除',
+                  name: '删除部门',
                   type: 'button',
                   permission: 'system:dept:delete',
                 },
@@ -257,22 +227,17 @@ async function main() {
             children: {
               create: [
                 {
-                  name: '创建',
+                  name: '创建岗位',
                   type: 'button',
                   permission: 'system:post:create',
                 },
                 {
-                  name: '查询',
-                  type: 'button',
-                  permission: 'system:post:query',
-                },
-                {
-                  name: '修改',
+                  name: '修改岗位',
                   type: 'button',
                   permission: 'system:post:update',
                 },
                 {
-                  name: '删除',
+                  name: '删除岗位',
                   type: 'button',
                   permission: 'system:post:delete',
                 },
@@ -289,22 +254,17 @@ async function main() {
             children: {
               create: [
                 {
-                  name: '创建',
+                  name: '创建知识库',
                   type: 'button',
                   permission: 'system:knowledgeBase:create',
                 },
                 {
-                  name: '查询',
-                  type: 'button',
-                  permission: 'system:knowledgeBase:query',
-                },
-                {
-                  name: '修改',
+                  name: '修改知识库',
                   type: 'button',
                   permission: 'system:knowledgeBase:update',
                 },
                 {
-                  name: '删除',
+                  name: '删除知识库',
                   type: 'button',
                   permission: 'system:knowledgeBase:delete',
                 },
@@ -331,11 +291,6 @@ async function main() {
                   name: '解析文件',
                   type: 'button',
                   permission: 'system:document:parse',
-                },
-                {
-                  name: '查询文件列表',
-                  type: 'button',
-                  permission: 'system:document:query',
                 },
                 {
                   name: '修改文件',
@@ -380,11 +335,6 @@ async function main() {
             children: {
               create: [
                 {
-                  name: '查询',
-                  type: 'button',
-                  permission: 'monitor:online:query',
-                },
-                {
                   name: '强退',
                   type: 'button',
                   permission: 'monitor:online:forceLogout',
@@ -399,15 +349,6 @@ async function main() {
             icon: 'i-ant-design:contacts-outlined',
             type: 'menu',
             path: '/monitor/loginLog',
-            children: {
-              create: [
-                {
-                  name: '查询',
-                  type: 'button',
-                  permission: 'monitor:loginLog:query',
-                },
-              ],
-            },
           },
           {
             name: '操作日志',
@@ -416,15 +357,6 @@ async function main() {
             icon: 'i-ant-design:cloud-server-outlined',
             type: 'menu',
             path: '/monitor/operationLog',
-            children: {
-              create: [
-                {
-                  name: '查询',
-                  type: 'button',
-                  permission: 'monitor:operationLog:query',
-                },
-              ],
-            },
           },
           {
             name: '服务器监控',
@@ -433,15 +365,6 @@ async function main() {
             order: 4,
             path: '/monitor/info',
             type: 'menu',
-            children: {
-              create: [
-                {
-                  name: '查询',
-                  type: 'button',
-                  permission: 'monitor:info:query',
-                },
-              ],
-            },
           },
         ],
       },

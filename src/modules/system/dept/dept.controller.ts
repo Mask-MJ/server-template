@@ -44,7 +44,6 @@ export class DeptController {
    */
   @Get()
   @ApiOkResponse({ type: DeptEntity, isArray: true })
-  @Permissions('system:dept:query')
   findAll(@Query() queryDeptDto: QueryDeptDto) {
     return this.deptService.findAll(queryDeptDto);
   }
@@ -54,7 +53,6 @@ export class DeptController {
    */
   @Get(':id')
   @ApiOkResponse({ type: DeptEntity })
-  @Permissions('system:dept:query')
   findOne(@Param('id') id: number) {
     return this.deptService.findOne(id);
   }

@@ -51,7 +51,6 @@ export class ValveController {
    */
   @Get()
   @ApiPaginatedResponse(ValveEntity)
-  @Permissions('project:valve:query')
   findAll(@Query() queryValveDto: QueryValveDto) {
     return this.valveService.findAll(queryValveDto);
   }
@@ -61,7 +60,6 @@ export class ValveController {
    */
   @Get('export')
   @ApiPaginatedResponse(ValveEntity)
-  @Permissions('project:valve:query')
   exportValveList(@Query() queryValveDto: QueryValveDto) {
     return this.valveService.exportValveList(queryValveDto);
   }
@@ -71,7 +69,6 @@ export class ValveController {
    */
   @Get('history-data')
   @ApiOkResponse({ type: ValveHistoryDataEntity, isArray: true })
-  @Permissions('project:valve:query')
   findHistoryDataList(@Query() queryValveListDto: QueryValveListDto) {
     return this.valveService.findHistoryDataList(queryValveListDto);
   }
@@ -80,7 +77,6 @@ export class ValveController {
    * 获取阀门运行数据详情
    */
   @Get('history-data/:id')
-  @Permissions('project:valve:query')
   findHistoryData(@Param('id') id: number) {
     return this.valveService.findHistoryData(id);
   }
@@ -89,7 +85,6 @@ export class ValveController {
    * 获取阀门评分列表
    */
   @Get('score')
-  @Permissions('project:valve:query')
   findScoreList(@Query() queryValveListDto: QueryValveListDto) {
     return this.valveService.findScoreList(queryValveListDto);
   }
@@ -98,7 +93,6 @@ export class ValveController {
    * 获取阀门评分详情
    */
   @Get('score/:id')
-  @Permissions('project:valve:query')
   findScore(@Param('id') id: number) {
     return this.valveService.findScore(id);
   }
@@ -120,7 +114,6 @@ export class ValveController {
    */
   @Get(':id')
   @ApiOkResponse({ type: ValveEntity })
-  @Permissions('project:valve:query')
   findOne(@Param('id') id: number) {
     return this.valveService.findOne(id);
   }

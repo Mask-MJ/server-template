@@ -46,7 +46,6 @@ export class PostController {
    */
   @Get()
   @ApiPaginatedResponse(PostEntity)
-  @Permissions('system:post:query')
   findAll(@Query() queryPostDto: QueryPostDto) {
     return this.postService.findAll(queryPostDto);
   }
@@ -56,7 +55,6 @@ export class PostController {
    */
   @Get(':id')
   @ApiOkResponse({ type: PostEntity })
-  @Permissions('system:post:query')
   findOne(@Param('id') id: number) {
     return this.postService.findOne(id);
   }

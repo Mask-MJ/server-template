@@ -47,7 +47,6 @@ export class UnitController {
    * */
   @Get()
   @ApiPaginatedResponse(UnitEntity)
-  @Permissions('project:unit:query')
   findAll(@Query() queryUnitDto: QueryUnitDto) {
     return this.unitService.findAll(queryUnitDto);
   }
@@ -69,7 +68,6 @@ export class UnitController {
    * */
   @Get(':id')
   @ApiOkResponse({ type: UnitEntity })
-  @Permissions('project:unit:query')
   findOne(@Param('id') id: number) {
     return this.unitService.findOne(id);
   }

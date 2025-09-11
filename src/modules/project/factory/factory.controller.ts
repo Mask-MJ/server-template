@@ -54,7 +54,6 @@ export class FactoryController {
    * 获取工厂列表
    */
   @Get()
-  @Permissions('project:factory:query')
   findAll(
     @ActiveUser() user: ActiveUserData,
     @Query() queryFactoryDto: QueryFactoryDto,
@@ -79,7 +78,6 @@ export class FactoryController {
    * 生成工厂中所有阀门报告
    * */
   @Post('report')
-  @Permissions('project:factory:query')
   generateReport(@Body() body: ReportDto) {
     return this.factoryService.generateReport(body);
   }
@@ -88,7 +86,6 @@ export class FactoryController {
    * */
   @Get('chart/:id')
   @ApiOkResponse({ type: FactoryEntity })
-  @Permissions('project:factory:query')
   findChartData(@Param('id') id: number) {
     return this.factoryService.findChartData(id);
   }
@@ -110,7 +107,6 @@ export class FactoryController {
    */
   @Get(':id')
   @ApiOkResponse({ type: FactoryEntity })
-  @Permissions('project:factory:query')
   findOne(@Param('id') id: number) {
     return this.factoryService.findOne(id);
   }

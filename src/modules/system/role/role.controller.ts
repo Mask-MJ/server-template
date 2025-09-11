@@ -46,7 +46,6 @@ export class RoleController {
    */
   @Get()
   @ApiPaginatedResponse(RoleEntity)
-  @Permissions('system:role:query')
   findAll(@Query() queryRoleDto: QueryRoleDto) {
     return this.roleService.findAll(queryRoleDto);
   }
@@ -56,7 +55,6 @@ export class RoleController {
    */
   @Get(':id')
   @ApiOkResponse({ type: RoleEntity })
-  @Permissions('system:role:query')
   findOne(@Param('id') id: number) {
     return this.roleService.findOne(id);
   }

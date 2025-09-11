@@ -49,7 +49,6 @@ export class UserController {
    */
   @Get()
   @ApiPaginatedResponse(UserEntity)
-  @Permissions('system:user:query')
   findAll(@Query() queryUserDto: QueryUserDto) {
     return this.userService.findAll(queryUserDto);
   }
@@ -87,7 +86,6 @@ export class UserController {
    */
   @Get(':id')
   @ApiOkResponse({ type: UserEntity })
-  @Permissions('system:user:query')
   findOne(@Param('id') id: number) {
     return this.userService.findOne(id);
   }

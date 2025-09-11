@@ -58,7 +58,6 @@ export class AnalysisTaskController {
    * */
   @Get()
   @ApiPaginatedResponse(AnalysisTaskEntity)
-  @Permissions('project:analysisTask:query')
   findAll(@Query() queryAnalysisTaskDto: QueryAnalysisTaskDto) {
     return this.analysisTaskService.findAll(queryAnalysisTaskDto);
   }
@@ -90,7 +89,6 @@ export class AnalysisTaskController {
    * 获取分析任务结果
    * */
   @Get('result/:id')
-  @Permissions('project:analysisTask:query')
   result(@Param('id') id: number) {
     return this.analysisTaskService.result(id);
   }
@@ -112,7 +110,6 @@ export class AnalysisTaskController {
    * */
   @Get(':id')
   @ApiOkResponse({ type: AnalysisTaskEntity })
-  @Permissions('project:analysisTask:query')
   findOne(@Param('id') id: number) {
     return this.analysisTaskService.findOne(id);
   }
