@@ -7,7 +7,9 @@ model Dept {
   /// 显示顺序
   order     Int      @default(1)
   /// 负责人
-  leader    String   @default("")
+  leader    String?
+  /// 负责人ID
+  leaderId  Int?
   /// 负责人电话
   phone     String   @default("")
   /// 负责人邮箱

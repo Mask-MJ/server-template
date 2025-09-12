@@ -49,6 +49,15 @@ export class UserController {
    */
   @Get()
   @ApiPaginatedResponse(UserEntity)
+  findWithPagination(@Query() queryUserDto: QueryUserDto) {
+    return this.userService.findWithPagination(queryUserDto);
+  }
+
+  /**
+   * 获取所有用户列表
+   */
+  @Get('all')
+  @ApiOkResponse({ type: UserEntity, isArray: true })
   findAll(@Query() queryUserDto: QueryUserDto) {
     return this.userService.findAll(queryUserDto);
   }

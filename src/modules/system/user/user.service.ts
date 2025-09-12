@@ -4,13 +4,17 @@ import { PrismaService } from '@/common/datebase/prisma.extension';
 import { HashingService } from '@/modules/auth/hashing/hashing.service';
 import { ActiveUserData } from '@/modules/auth/interfaces/active-user-data.interface';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
   constructor(
     @Inject('PrismaService') private readonly prisma: PrismaService,
     private readonly hashingService: HashingService,
+    private configService: ConfigService,
     @Inject(EventEmitter2) private readonly eventEmitter: EventEmitter2,
+    @Inject(HttpService) private httpService: HttpService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -21,6 +25,7 @@ export class UserService {
       throw new ConflictException('账号已存在');
     }
     const { roleIds, ...rest } = createUserDto;
+
     return this.prisma.client.user.create({
       data: {
         ...rest,
@@ -34,7 +39,10 @@ export class UserService {
     return await this.prisma.client.user.findUniqueOrThrow({
       where: { id },
       omit: { password: true },
-      include: { roles: { include: { menus: true } } },
+      include: {
+        roles: { include: { menus: true } },
+        dept: { select: { id: true, name: true } },
+      },
     });
   }
 
@@ -49,7 +57,7 @@ export class UserService {
     return Array.from(new Set(codes));
   }
 
-  async findAll(queryUserDto: QueryUserDto) {
+  async findWithPagination(queryUserDto: QueryUserDto) {
     const {
       username,
       nickname,
@@ -70,9 +78,8 @@ export class UserService {
           createdAt: { gte: beginTime, lte: endTime },
         },
         include: {
-          roles: {
-            select: { id: true, name: true },
-          },
+          roles: { select: { id: true, name: true } },
+          dept: { select: { id: true, name: true } },
         },
         omit: { password: true },
       })
@@ -81,10 +88,29 @@ export class UserService {
     return { list, ...meta };
   }
 
+  async findAll(queryUserDto: QueryUserDto) {
+    const { username, nickname, email, phoneNumber, beginTime, endTime } =
+      queryUserDto;
+    return await this.prisma.client.user.findMany({
+      where: {
+        username: { contains: username, mode: 'insensitive' },
+        nickname: { contains: nickname, mode: 'insensitive' },
+        email: { contains: email, mode: 'insensitive' },
+        phoneNumber: { contains: phoneNumber, mode: 'insensitive' },
+        createdAt: { gte: beginTime, lte: endTime },
+      },
+      include: {
+        roles: { select: { id: true, name: true } },
+        dept: { select: { id: true, name: true } },
+      },
+      omit: { password: true },
+    });
+  }
+
   async findOne(id: number) {
     return await this.prisma.client.user.findUniqueOrThrow({
       where: { id },
-      include: { roles: true },
+      include: { roles: true, dept: true },
       omit: { password: true },
     });
   }

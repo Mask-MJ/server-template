@@ -1,0 +1,57 @@
+/// 知识库信息表
+model KnowledgeBase {
+  /// 知识库ID
+  id              Int         @id @default(autoincrement())
+  /// 知识库名称
+  name            String
+  /// 知识库图片
+  avatar          String?
+  /// 知识库简介
+  description     String?
+  /// 知识库向量模型 "BAAI/bge-large-zh-v1.5@BAAI"
+  embedding_model String
+  /// 知识库访问权限 "me" | "team"
+  permission      String?
+  /// 知识库分块方式
+  chunk_method    ChunkMethod @default(naive)
+  parser_config   Json?
+  /// 关联数据集ID
+  datasetId       String?
+  /// 显示顺序
+  order           Int         @default(1)
+  /// 创建者
+  createBy        String
+  /// 更新者
+  updateBy        String?
+  /// 创建时间
+  createdAt       DateTime    @default(now())
+  /// 更新时间
+  updatedAt       DateTime    @updatedAt
+}
+
+enum ChunkMethod {
+  /// 常规
+  naive
+  /// 书
+  book
+  /// 电子邮件
+  email
+  /// 法律
+  laws
+  /// 手动
+  manual
+  /// 一对一
+  one
+  /// 纸
+  paper
+  /// 图片
+  picture
+  /// 演示文稿
+  presentation
+  /// 问答
+  qa
+  /// 表格
+  table
+  /// 标签
+  tag
+}

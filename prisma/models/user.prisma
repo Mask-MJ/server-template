@@ -4,6 +4,8 @@ model User {
   id          Int      @id @default(autoincrement())
   /// 是否是超级管理员
   isAdmin     Boolean  @default(false)
+  /// 是否是部门管理员
+  isDeptAdmin Boolean  @default(false)
   /// 用户名
   username    String   @unique
   /// 密码
@@ -20,6 +22,7 @@ model User {
   sex         Int      @default(1)
   /// 状态
   status      Boolean  @default(true)
+  deptId      Int?
   /// 创建时间
   createdAt   DateTime @default(now())
   /// 更新时间
@@ -32,5 +35,5 @@ model User {
   updateBy    User?    @relation("editor")
   roles       Role[]   @relation("RoleToUser")
   posts       Post[]   @relation("PostToUser")
-  dept        Dept[]   @relation("DeptToUser")
+  dept        Dept?    @relation("DeptToUser", fields: [deptId], references: [id])
 }

@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateDeptDto, QueryDeptDto, UpdateDeptDto } from './dept.dto';
+import { CreateDeptDto, QueryDeptDto, UpdateDeptDto } from './document.dto';
 import { PrismaService } from '@/common/datebase/prisma.extension';
 import { ActiveUserData } from '@/modules/auth/interfaces/active-user-data.interface';
 import { transformationTree } from '@/common/utils';
-import { DeptEntity } from './dept.entity';
+import { DeptEntity } from './document.entity';
 @Injectable()
 export class DeptService {
   constructor(

@@ -6,6 +6,7 @@ import { RoleEntity } from '../role/role.entity';
 export class UserEntity implements User {
   id: number;
   isAdmin: boolean;
+  isDeptAdmin: boolean;
   username: string;
   @ApiHideProperty()
   @Exclude()
@@ -16,6 +17,7 @@ export class UserEntity implements User {
   phoneNumber: string;
   sex: number;
   status: boolean;
+  deptId: number | null;
   createBy: string;
   createdAt: Date;
   updatedAt: Date;

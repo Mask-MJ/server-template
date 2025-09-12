@@ -33,6 +33,15 @@ export class CreateUserDto {
   password: string;
 
   /**
+   * 是否是部门管理员
+   * @example true
+   */
+  @IsOptional()
+  @IsBoolean()
+  @Type(() => Boolean)
+  isDeptAdmin?: boolean = false;
+
+  /**
    * 昵称
    * @example '管理员'
    */

@@ -16,9 +16,11 @@ import { DictService } from './dict/dict.service';
 import { MenuService } from './menu/menu.service';
 import { PostService } from './post/post.service';
 import { RoleService } from './role/role.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
+    HttpModule.register({}),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
   ],
