@@ -1,55 +1,30 @@
-import { IntersectionType, PartialType, PickType } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
-export class CreateDeptDto {
+export class UploadDocumentDto {
   /**
-   * 部门名称
-   * @example '技术部'
+   * 知识库ID
+   * @example '78e5ae6691db11f084d3fa341edb7c4d'
    */
   @IsString()
-  name: string;
-  /**
-   * 排序
-   * @example 1
-   */
-  @IsNumber()
-  @Type(() => Number)
-  @IsOptional()
-  order?: number;
-  /**
-   * 负责人id
-   * @example 1
-   */
-  @IsNumber()
-  leaderId: number;
-  /**
-   * 负责人电话
-   * @example '13000000000'
-   */
-  @IsString()
-  @IsOptional()
-  phone?: string;
-  /**
-   * 邮箱
-   * @example xxx@qq.com
-   */
-  @IsString()
-  @IsOptional()
-  email?: string;
-  /**
-   * 上级部门ID
-   */
-  @IsNumber()
-  @IsOptional()
-  parentId?: number;
+  kb_id: string;
 }
 
-export class QueryDeptDto extends PartialType(
-  IntersectionType(PickType(CreateDeptDto, ['name'])),
-) {}
+export class QueryDocumentDto extends UploadDocumentDto {
+  /**
+   * 文件名称
+   * @example '技术文档'
+   */
+  @IsString()
+  @IsOptional()
+  name?: string;
+}
 
-export class UpdateDeptDto extends PartialType(CreateDeptDto) {
-  @IsNumber()
-  id: number;
+export class UpdateDocumentDto extends UploadDocumentDto {
+  /**
+   * 文件名称
+   * @example '技术文档'
+   */
+  @IsString()
+  @IsOptional()
+  name?: string;
 }

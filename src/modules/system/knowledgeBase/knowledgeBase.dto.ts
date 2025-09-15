@@ -1,6 +1,7 @@
 import {
   ApiProperty,
   IntersectionType,
+  OmitType,
   PartialType,
   PickType,
 } from '@nestjs/swagger';
@@ -63,8 +64,8 @@ export class CreateKnowledgeBaseDto {
   permission?: string;
 
   /**
-   * 菜单类别
-   * @example 'menu'
+   * 解析方法
+   * @example 'naive'
    */
   @IsString()
   @IsEnum(ChunkMethod)
@@ -73,7 +74,7 @@ export class CreateKnowledgeBaseDto {
 
   /**
    * 数据集分析器的配置设置
-   * @example '{"max_tokens": 1024, "temperature": 0.5}'
+   * @example {"max_tokens": 1024, "temperature": 0.5}
    */
   @IsObject()
   @IsOptional()
@@ -85,8 +86,44 @@ export class QueryKnowledgeBaseDto extends PartialType(
 ) {}
 
 export class UpdateKnowledgeBaseDto extends PartialType(
-  CreateKnowledgeBaseDto,
+  OmitType(CreateKnowledgeBaseDto, ['embedding_model']),
 ) {
   @IsNumber()
   id: number;
+}
+
+export class updateDocumentDto {
+  /**
+   * 文档名称
+   * @example '文档1'
+   */
+  @IsString()
+  @IsOptional()
+  name?: string;
+
+  /**
+   * 文档元数据
+   * @example {"author": "张三", "tags": ["tag1", "tag2"]}
+   */
+  @IsObject()
+  @IsOptional()
+  meta_fields?: object;
+
+  /**
+   * 解析方法
+   * @example 'naive'
+   */
+  @IsString()
+  @IsEnum(ChunkMethod)
+  @IsOptional()
+  @ApiProperty({ enum: ChunkMethod })
+  chunk_method?: ChunkMethod;
+
+  /**
+   * 数据集分析器的配置设置
+   * @example {"max_tokens": 1024, "temperature": 0.5}
+   */
+  @IsObject()
+  @IsOptional()
+  parser_config?: object;
 }

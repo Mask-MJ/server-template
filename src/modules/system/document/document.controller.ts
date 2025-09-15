@@ -7,76 +7,89 @@ import {
   Param,
   Delete,
   Query,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
-import { DeptService } from './document.service';
-import { CreateDeptDto, QueryDeptDto, UpdateDeptDto } from './document.dto';
+import { DocumentService } from './document.service';
+import {
+  QueryDocumentDto,
+  UpdateDocumentDto,
+  UploadDocumentDto,
+} from './document.dto';
 import {
   ApiTags,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiBody,
+  ApiConsumes,
 } from '@nestjs/swagger';
 import { ActiveUser } from '@/modules/auth/decorators/active-user.decorator';
 import { ActiveUserData } from '@/modules/auth/interfaces/active-user-data.interface';
-import { DeptEntity } from './document.entity';
+import { DocumentEntity } from './document.entity';
 import { Permissions } from 'src/modules/auth/authorization/decorators/permissions.decorator';
+import { UploadDto } from '@/common/dto/base.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
-@ApiTags('部门管理')
+@ApiTags('文件管理')
 @ApiBearerAuth('bearer')
-@Controller('dept')
-export class DeptController {
-  constructor(private readonly deptService: DeptService) {}
+@Controller('document')
+export class DocumentController {
+  constructor(private readonly documentService: DocumentService) {}
   /**
-   * 创建部门
+   * 上传文件
    */
-  @Post()
-  @ApiCreatedResponse({ type: DeptEntity })
-  @Permissions('system:dept:create')
-  create(
-    @ActiveUser() user: ActiveUserData,
-    @Body() createDeptDto: CreateDeptDto,
+  @Post('upload')
+  @ApiConsumes('multipart/form-data')
+  @ApiCreatedResponse({ type: DocumentEntity, isArray: true })
+  @ApiBody({ description: '上传文件', type: UploadDto })
+  @Permissions('system:knowledgeBase:create')
+  @UseInterceptors(FilesInterceptor('files'))
+  upload(
+    @Body() body: UploadDocumentDto,
+    @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
-    return this.deptService.create(user, createDeptDto);
+    return this.documentService.upload(body, files);
   }
 
   /**
-   * 获取部门列表
+   * 获取文件列表
    */
   @Get()
-  @ApiOkResponse({ type: DeptEntity, isArray: true })
-  findAll(@Query() queryDeptDto: QueryDeptDto) {
-    return this.deptService.findAll(queryDeptDto);
+  @ApiOkResponse({ type: DocumentEntity, isArray: true })
+  findAll(@Query() queryDocumentDto: QueryDocumentDto) {
+    return this.documentService.findAll(queryDocumentDto);
   }
 
   /**
-   * 获取部门详情
+   * 下载文件
    */
   @Get(':id')
-  @ApiOkResponse({ type: DeptEntity })
-  findOne(@Param('id') id: number) {
-    return this.deptService.findOne(id);
+  @ApiOkResponse({ type: DocumentEntity })
+  download(@Param('id') id: number) {
+    // return this.documentService.download(id);
   }
 
   /**
-   * 更新部门
+   * 更新文件信息
    */
   @Patch(':id')
-  @ApiOkResponse({ type: DeptEntity })
-  @Permissions('system:dept:update')
+  @ApiOkResponse({ type: DocumentEntity })
+  @Permissions('system:document:update')
   update(
     @Param('id') id: number,
     @ActiveUser() user: ActiveUserData,
-    @Body() updateDeptDto: UpdateDeptDto,
+    @Body() updateDocumentDto: UpdateDocumentDto,
   ) {
-    return this.deptService.update(id, user, updateDeptDto);
+    return this.documentService.update(id, user, updateDocumentDto);
   }
 
   /**
-   * 删除部门
+   * 删除文件
    */
   @Delete(':id')
-  @Permissions('system:dept:delete')
+  @Permissions('system:document:delete')
   remove(@Param('id') id: number) {
-    return this.deptService.remove(id);
+    return this.documentService.remove(id);
   }
 }

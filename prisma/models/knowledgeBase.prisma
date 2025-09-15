@@ -27,6 +27,8 @@ model KnowledgeBase {
   createdAt       DateTime    @default(now())
   /// 更新时间
   updatedAt       DateTime    @updatedAt
+  deptId          Int?
+  dept            Dept?       @relation(fields: [deptId], references: [id], onDelete: Cascade)
 }
 
 enum ChunkMethod {
