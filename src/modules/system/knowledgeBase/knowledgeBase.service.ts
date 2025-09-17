@@ -8,12 +8,12 @@ import {
   CreateKnowledgeBaseDto,
   QueryKnowledgeBaseDto,
   UpdateKnowledgeBaseDto,
+  UpdateDocumentDto,
 } from './knowledgeBase.dto';
 import { PrismaService } from '@/common/datebase/prisma.extension';
 import { ActiveUserData } from '@/modules/auth/interfaces/active-user-data.interface';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-import { UpdateDocumentDto } from '../document/document.dto';
 
 @Injectable()
 export class KnowledgeBaseService {
@@ -169,12 +169,12 @@ export class KnowledgeBaseService {
     });
   }
 
-  async removeDocument(id: string, document_id: string) {
+  async removeDocument(id: string, ids: string[]) {
     const ragflowHost = this.configService.get<string>('RAGFLOW_HOST', '');
     const ragflow_apiKey = this.configService.get<string>('RAGFLOW_APIKEY', '');
     const ragFlowDatasets = await this.httpService.axiosRef.delete(
-      `${ragflowHost}/api/v1/datasets/${id}/documents/${document_id}`,
-      { headers: { Authorization: `Bearer ${ragflow_apiKey}` } },
+      `${ragflowHost}/api/v1/datasets/${id}/documents`,
+      { headers: { Authorization: `Bearer ${ragflow_apiKey}` }, data: { ids } },
     );
     if (ragFlowDatasets.data.code !== 0) {
       throw new ConflictException(
@@ -182,5 +182,33 @@ export class KnowledgeBaseService {
       );
     }
     return ragFlowDatasets.data.data;
+  }
+
+  async parseDocument(id: string, document_ids: string[]) {
+    const ragflowHost = this.configService.get<string>('RAGFLOW_HOST', '');
+    const ragflow_apiKey = this.configService.get<string>('RAGFLOW_APIKEY', '');
+    const ragFlowDatasets = await this.httpService.axiosRef.post(
+      `${ragflowHost}/api/v1/datasets/${id}/documents/chunks`,
+      { document_ids },
+      { headers: { Authorization: `Bearer ${ragflow_apiKey}` } },
+    );
+    if (ragFlowDatasets.data.code !== 0) {
+      throw new ConflictException(
+        `解析知识库文件失败, ${ragFlowDatasets.data.message}`,
+      );
+    }
+    return ragFlowDatasets.data.data;
+  }
+
+  async stopParseDocument(id: string, document_ids: string[]) {
+    const ragflowHost = this.configService.get<string>('RAGFLOW_HOST', '');
+    const ragflow_apiKey = this.configService.get<string>('RAGFLOW_APIKEY', '');
+    return this.httpService.axiosRef.delete(
+      `${ragflowHost}/api/v1/datasets/${id}/documents/chunks`,
+      {
+        headers: { Authorization: `Bearer ${ragflow_apiKey}` },
+        data: { document_ids },
+      },
+    );
   }
 }

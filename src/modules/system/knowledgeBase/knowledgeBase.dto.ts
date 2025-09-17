@@ -92,7 +92,7 @@ export class UpdateKnowledgeBaseDto extends PartialType(
   id: number;
 }
 
-export class updateDocumentDto {
+export class UpdateDocumentDto {
   /**
    * 文档名称
    * @example '文档1'
@@ -127,3 +127,14 @@ export class updateDocumentDto {
   @IsOptional()
   parser_config?: object;
 }
+
+export class DeleteDocumentDto {
+  /**
+   * 文件ID
+   * @example ['78e5ae6691db11f084d3fa341edb7c4d', '78e5ae6691db11f084d3fa341edb7c4e']
+   */
+  @IsString({ each: true })
+  document_ids: string[];
+}
+
+export class ParseDocumentDto extends DeleteDocumentDto {}

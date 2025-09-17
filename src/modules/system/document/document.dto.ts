@@ -28,3 +28,14 @@ export class UpdateDocumentDto extends UploadDocumentDto {
   @IsOptional()
   name?: string;
 }
+
+export class DeleteDocumentDto {
+  /**
+   * 文件ID
+   * @example ['78e5ae6691db11f084d3fa341edb7c4d', '78e5ae6691db11f084d3fa341edb7c4e']
+   */
+  @IsString({ each: true })
+  document_ids: string[];
+}
+
+export class ParseDocumentDto extends DeleteDocumentDto {}

@@ -16,6 +16,9 @@ import {
   CreateKnowledgeBaseDto,
   QueryKnowledgeBaseDto,
   UpdateKnowledgeBaseDto,
+  DeleteDocumentDto,
+  UpdateDocumentDto,
+  ParseDocumentDto,
 } from './knowledgeBase.dto';
 import {
   ApiTags,
@@ -31,7 +34,6 @@ import { DocumentEntity, KnowledgeBaseEntity } from './knowledgeBase.entity';
 import { Permissions } from 'src/modules/auth/authorization/decorators/permissions.decorator';
 import { UploadDto } from '@/common/dto/base.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { UpdateDocumentDto } from '../document/document.dto';
 
 @ApiTags('知识库管理')
 @ApiBearerAuth('bearer')
@@ -144,12 +146,45 @@ export class KnowledgeBaseController {
   /**
    * 删除知识库文件
    */
-  @Delete(':id/documents/:document_id')
+  @Delete(':id/documents')
   @Permissions('system:knowledgeBase:delete')
   removeDocument(
     @Param('id') id: string,
-    @Param('document_id') document_id: string,
+    @Body() deleteDocumentDto: DeleteDocumentDto,
   ) {
-    return this.knowledgeBaseService.removeDocument(id, document_id);
+    return this.knowledgeBaseService.removeDocument(
+      id,
+      deleteDocumentDto.document_ids,
+    );
+  }
+
+  /**
+   * 解析指定知识库中的文件
+   */
+  @Post(':id/parse')
+  @Permissions('system:knowledgeBase:parse')
+  parseChunks(
+    @Param('id') id: string,
+    @Body() parseDocumentDto: ParseDocumentDto,
+  ) {
+    return this.knowledgeBaseService.parseDocument(
+      id,
+      parseDocumentDto.document_ids,
+    );
+  }
+
+  /**
+   * 停止解析指定知识库中的文件
+   */
+  @Delete(':id/parse')
+  @Permissions('system:knowledgeBase:stop-parse')
+  stopParseChunks(
+    @Param('id') id: string,
+    @Body() parseDocumentDto: ParseDocumentDto,
+  ) {
+    return this.knowledgeBaseService.stopParseDocument(
+      id,
+      parseDocumentDto.document_ids,
+    );
   }
 }
