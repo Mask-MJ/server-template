@@ -9,6 +9,7 @@ import {
   Query,
   UseInterceptors,
   UploadedFiles,
+  StreamableFile,
 } from '@nestjs/common';
 import { KnowledgeBaseService } from './knowledgeBase.service';
 import {
@@ -136,7 +137,7 @@ export class KnowledgeBaseController {
   downloadDocument(
     @Param('id') id: string,
     @Param('document_id') document_id: string,
-  ) {
+  ): Promise<StreamableFile> {
     return this.knowledgeBaseService.downloadDocument(id, document_id);
   }
 

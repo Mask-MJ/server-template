@@ -1,4 +1,9 @@
-import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  StreamableFile,
+} from '@nestjs/common';
 import {
   CreateKnowledgeBaseDto,
   QueryKnowledgeBaseDto,
@@ -142,32 +147,26 @@ export class KnowledgeBaseService {
   async downloadDocument(id: string, document_id: string) {
     const ragflowHost = this.configService.get<string>('RAGFLOW_HOST', '');
     const ragflow_apiKey = this.configService.get<string>('RAGFLOW_APIKEY', '');
+
     const response = await this.httpService.axiosRef.get(
       `${ragflowHost}/api/v1/datasets/${id}/documents/${document_id}`,
       {
         headers: { Authorization: `Bearer ${ragflow_apiKey}` },
-        responseType: 'stream', // 关键：设置为流式响应
+        responseType: 'arraybuffer',
       },
     );
-    const filename = response.headers['content-disposition']
-      ? response.headers['content-disposition'].split('filename=')[1]
+
+    const contentDisposition = response.headers['content-disposition'];
+    const filename = contentDisposition
+      ? decodeURIComponent(
+          (contentDisposition.match(/filename\*?=(?:UTF-8'')?([^;]+)/) ||
+            [])[1] || 'unknown',
+        ).replace(/['"]/g, '')
       : 'unknown';
-
-    const buffer = await new Response(response.data).arrayBuffer();
-
-    return new Blob([buffer], {
-      type: 'application/octet-stream',
+    return new StreamableFile(response.data, {
+      disposition: `attachment; filename="${filename}"`,
+      type: response.headers['content-type'],
     });
-    // if (response.status === 200) {
-    //   // return response;
-    //   console.log('response.data', response);
-    //   const fileBuffer = Buffer.from(response.data, 'hex');
-    //   // return response.data;
-    //   return fileBuffer;
-    // } else {
-    //   throw new ConflictException(`下载文件失败, ${response.data.message}`);
-    // }
-    return response.data;
   }
 
   async removeDocument(id: string, document_id: string) {
