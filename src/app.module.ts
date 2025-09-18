@@ -11,7 +11,7 @@ import { RouterModule } from '@nestjs/core';
 import { AuthModule } from './modules/auth/auth.module';
 import { MonitorModule } from './modules/monitor/monitor.module';
 import { SystemModule } from './modules/system/system.module';
-import { ProjectModule } from './modules/project/project.module';
+import { KnowledgeBaseModule } from './modules/knowledge-base/knowledge-base.module';
 @Module({
   imports: [
     ConfigModule,
@@ -50,15 +50,14 @@ import { ProjectModule } from './modules/project/project.module';
     }),
     EventEmitterModule.forRoot(),
     RouterModule.register([
-      { path: 'project', module: ProjectModule },
       { path: 'system', module: SystemModule },
       { path: 'monitor', module: MonitorModule },
       { path: 'auth', module: AuthModule },
     ]),
     AuthModule,
-    ProjectModule,
     SystemModule,
     MonitorModule,
+    KnowledgeBaseModule,
   ],
   controllers: [],
   providers: [],

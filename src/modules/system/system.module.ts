@@ -11,15 +11,11 @@ import { DictController } from './dict/dict.controller';
 import { MenuController } from './menu/menu.controller';
 import { PostController } from './post/post.controller';
 import { RoleController } from './role/role.controller';
-import { KnowledgeBaseController } from './knowledgeBase/knowledgeBase.controller';
-import { DocumentController } from './document/document.controller';
 import { DeptService } from './dept/dept.service';
 import { DictService } from './dict/dict.service';
 import { MenuService } from './menu/menu.service';
 import { PostService } from './post/post.service';
 import { RoleService } from './role/role.service';
-import { KnowledgeBaseService } from './knowledgeBase/knowledgeBase.service';
-import { DocumentService } from './document/document.service';
 import { HttpModule } from '@nestjs/axios';
 
 @Module({
@@ -35,8 +31,6 @@ import { HttpModule } from '@nestjs/axios';
     MenuController,
     RoleController,
     PostController,
-    KnowledgeBaseController,
-    DocumentController,
   ],
   providers: [
     { provide: HashingService, useClass: BcryptService },
@@ -46,8 +40,6 @@ import { HttpModule } from '@nestjs/axios';
     MenuService,
     RoleService,
     PostService,
-    KnowledgeBaseService,
-    DocumentService,
   ],
 })
 export class SystemModule {}

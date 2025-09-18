@@ -1,19 +1,11 @@
 import {
-  ApiProperty,
   IntersectionType,
   OmitType,
   PartialType,
   PickType,
 } from '@nestjs/swagger';
-import { ChunkMethod } from '@prisma/client';
 import { Type } from 'class-transformer';
-import {
-  IsEnum,
-  IsNumber,
-  IsObject,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 
 export class CreateKnowledgeBaseDto {
   /**
@@ -46,14 +38,15 @@ export class CreateKnowledgeBaseDto {
    */
   @IsString()
   @IsOptional()
-  description?: string;
+  description: string = '';
 
   /**
    * 嵌入模型
    * @example 'text-embedding-ada-002'
    */
   @IsString()
-  embedding_model: string;
+  @IsOptional()
+  embedding_model: string = 'text-embedding-v4@Tongyi-Qianwen';
 
   /**
    * 权限标识
@@ -68,9 +61,8 @@ export class CreateKnowledgeBaseDto {
    * @example 'naive'
    */
   @IsString()
-  @IsEnum(ChunkMethod)
-  @ApiProperty({ enum: ChunkMethod })
-  chunk_method: ChunkMethod;
+  @IsOptional()
+  chunk_method?: string = 'naive';
 
   /**
    * 数据集分析器的配置设置
@@ -89,7 +81,18 @@ export class UpdateKnowledgeBaseDto extends PartialType(
   OmitType(CreateKnowledgeBaseDto, ['embedding_model']),
 ) {
   @IsNumber()
+  @Type(() => Number)
   id: number;
+}
+
+export class QueryDocumentDto {
+  /**
+   * 文档名称
+   * @example '文档1'
+   */
+  @IsString()
+  @IsOptional()
+  name?: string;
 }
 
 export class UpdateDocumentDto {
@@ -114,10 +117,8 @@ export class UpdateDocumentDto {
    * @example 'naive'
    */
   @IsString()
-  @IsEnum(ChunkMethod)
   @IsOptional()
-  @ApiProperty({ enum: ChunkMethod })
-  chunk_method?: ChunkMethod;
+  chunk_method?: string = 'naive';
 
   /**
    * 数据集分析器的配置设置

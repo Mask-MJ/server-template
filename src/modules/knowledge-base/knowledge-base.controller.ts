@@ -11,7 +11,7 @@ import {
   UploadedFiles,
   StreamableFile,
 } from '@nestjs/common';
-import { KnowledgeBaseService } from './knowledgeBase.service';
+import { KnowledgeBaseService } from './knowledge-base.service';
 import {
   CreateKnowledgeBaseDto,
   QueryKnowledgeBaseDto,
@@ -19,7 +19,8 @@ import {
   DeleteDocumentDto,
   UpdateDocumentDto,
   ParseDocumentDto,
-} from './knowledgeBase.dto';
+  QueryDocumentDto,
+} from './knowledge-base.dto';
 import {
   ApiTags,
   ApiBearerAuth,
@@ -30,7 +31,7 @@ import {
 } from '@nestjs/swagger';
 import { ActiveUser } from '@/modules/auth/decorators/active-user.decorator';
 import { ActiveUserData } from '@/modules/auth/interfaces/active-user-data.interface';
-import { DocumentEntity, KnowledgeBaseEntity } from './knowledgeBase.entity';
+import { DocumentEntity, KnowledgeBaseEntity } from './knowledge-base.entity';
 import { Permissions } from 'src/modules/auth/authorization/decorators/permissions.decorator';
 import { UploadDto } from '@/common/dto/base.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
@@ -45,7 +46,7 @@ export class KnowledgeBaseController {
    */
   @Post()
   @ApiCreatedResponse({ type: KnowledgeBaseEntity })
-  @Permissions('system:knowledgeBase:create')
+  @Permissions('knowledgeBase:create')
   create(
     @ActiveUser() user: ActiveUserData,
     @Body() createKnowledgeBaseDto: CreateKnowledgeBaseDto,
@@ -79,22 +80,34 @@ export class KnowledgeBaseController {
    */
   @Patch(':id')
   @ApiOkResponse({ type: KnowledgeBaseEntity })
-  @Permissions('system:knowledgeBase:update')
+  @Permissions('knowledgeBase:update')
   update(
-    @Param('id') id: number,
     @ActiveUser() user: ActiveUserData,
     @Body() updateKnowledgeBaseDto: UpdateKnowledgeBaseDto,
   ) {
-    return this.knowledgeBaseService.update(id, user, updateKnowledgeBaseDto);
+    return this.knowledgeBaseService.update(user, updateKnowledgeBaseDto);
   }
 
   /**
    * 删除知识库
    */
   @Delete(':id')
-  @Permissions('system:knowledgeBase:delete')
+  @Permissions('knowledgeBase:delete')
   remove(@Param('id') id: number) {
     return this.knowledgeBaseService.remove(id);
+  }
+
+  /**
+   * 获取知识库文件列表
+   */
+  @Get(':id/documents')
+  @ApiOkResponse({ type: DocumentEntity, isArray: true })
+  @Permissions('document:list')
+  findAllDocument(
+    @Param('id') id: number,
+    @Query() queryDocumentDto: QueryDocumentDto,
+  ) {
+    return this.knowledgeBaseService.findAllDocument(id, queryDocumentDto);
   }
 
   /**
@@ -104,7 +117,7 @@ export class KnowledgeBaseController {
   @ApiConsumes('multipart/form-data')
   @ApiCreatedResponse({ type: DocumentEntity, isArray: true })
   @ApiBody({ description: '上传文件', type: UploadDto })
-  @Permissions('system:knowledgeBase:create')
+  @Permissions('document:create')
   @UseInterceptors(FilesInterceptor('files'))
   uploadDocument(
     @Param('id') id: string,
@@ -118,7 +131,7 @@ export class KnowledgeBaseController {
    */
   @Patch(':id/documents/:document_id')
   @ApiOkResponse({ type: DocumentEntity })
-  @Permissions('system:knowledgeBase:update')
+  @Permissions('document:update')
   updateDocument(
     @Param('id') id: string,
     @Param('document_id') document_id: string,
@@ -135,7 +148,7 @@ export class KnowledgeBaseController {
    * 下载知识库文件
    */
   @Get(':id/documents/:document_id')
-  @Permissions('system:knowledgeBase:download')
+  @Permissions('document:download')
   downloadDocument(
     @Param('id') id: string,
     @Param('document_id') document_id: string,
@@ -147,7 +160,7 @@ export class KnowledgeBaseController {
    * 删除知识库文件
    */
   @Delete(':id/documents')
-  @Permissions('system:knowledgeBase:delete')
+  @Permissions('document:delete')
   removeDocument(
     @Param('id') id: string,
     @Body() deleteDocumentDto: DeleteDocumentDto,
@@ -162,7 +175,7 @@ export class KnowledgeBaseController {
    * 解析指定知识库中的文件
    */
   @Post(':id/parse')
-  @Permissions('system:knowledgeBase:parse')
+  @Permissions('document:parse')
   parseChunks(
     @Param('id') id: string,
     @Body() parseDocumentDto: ParseDocumentDto,
@@ -177,7 +190,7 @@ export class KnowledgeBaseController {
    * 停止解析指定知识库中的文件
    */
   @Delete(':id/parse')
-  @Permissions('system:knowledgeBase:stop-parse')
+  @Permissions('document:stop-parse')
   stopParseChunks(
     @Param('id') id: string,
     @Body() parseDocumentDto: ParseDocumentDto,

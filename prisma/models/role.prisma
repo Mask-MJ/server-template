@@ -1,26 +1,25 @@
 /// 角色信息表
 model Role {
   /// 角色ID
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   /// 角色名称
-  name      String    @unique
+  name      String   @unique
   /// 角色键值
-  value     String    @unique
+  value     String   @unique
   /// 显示顺序
-  order     Int       @default(1)
+  order     Int      @default(1)
   /// 状态
-  status    Boolean   @default(true)
+  status    Boolean  @default(true)
   /// 创建者
   createBy  String?
   /// 更新者
   updateBy  String?
   /// 创建时间
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
   /// 更新时间
-  updatedAt DateTime  @updatedAt
+  updatedAt DateTime @updatedAt
   /// 备注
-  remark    String    @default("")
-  users     User[]    @relation("RoleToUser")
-  menus     Menu[]    @relation("MenuToRole")
-  factories Factory[] @relation("FactoryToRole")
+  remark    String   @default("")
+  users     User[]   @relation("RoleToUser")
+  menus     Menu[]   @relation("MenuToRole")
 }

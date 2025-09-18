@@ -56,13 +56,91 @@ async function main() {
       },
     },
   });
+  // 知识库
+  await prisma.menu.create({
+    data: {
+      name: '知识库',
+      title: 'knowledgeBase.title',
+      icon: 'i-ant-design:database-outlined',
+      order: 2,
+      type: 'menu',
+      path: '/knowledgeBase',
+      hideChildrenInMenu: true,
+      children: {
+        create: [
+          {
+            name: '知识库详情',
+            title: 'knowledgeBase.detail.title',
+            hideInMenu: true,
+            icon: 'i-ant-design:folder-outlined',
+            order: 1,
+            type: 'menu',
+            path: '/knowledgeBase/detail/:id',
+          },
+          {
+            name: '创建知识库',
+            type: 'button',
+            permission: 'knowledgeBase:create',
+          },
+          {
+            name: '修改知识库',
+            type: 'button',
+            permission: 'knowledgeBase:update',
+          },
+          {
+            name: '删除知识库',
+            type: 'button',
+            permission: 'knowledgeBase:delete',
+          },
+          { name: '上传文件', type: 'button', permission: 'document:upload' },
+          { name: '解析文件', type: 'button', permission: 'document:parse' },
+          {
+            name: '停止解析文件',
+            type: 'button',
+            permission: 'document:stop-parse',
+          },
+          { name: '修改文件', type: 'button', permission: 'document:update' },
+          { name: '删除文件', type: 'button', permission: 'document:delete' },
+          { name: '下载文件', type: 'button', permission: 'document:download' },
+        ],
+      },
+    },
+  });
+  // 聊天助手
+  await prisma.menu.create({
+    data: {
+      name: '聊天助手',
+      title: 'assistant.title',
+      icon: 'i-ant-design:robot-outlined',
+      order: 2,
+      type: 'menu',
+      path: '/assistant',
+      hideChildrenInMenu: true,
+      children: {
+        create: [
+          {
+            name: '聊天',
+            title: 'assistant.chat.title',
+            hideInMenu: true,
+            icon: 'i-ant-design:message-outlined',
+            order: 1,
+            type: 'menu',
+            path: '/assistant/chat/:id',
+          },
+          { name: '创建聊天', type: 'button', permission: 'assistant:create' },
+          { name: '修改聊天', type: 'button', permission: 'assistant:update' },
+          { name: '删除聊天', type: 'button', permission: 'assistant:delete' },
+        ],
+      },
+    },
+  });
   // 系统管理
   await prisma.menu.create({
     data: {
       name: '系统管理',
       title: 'system.title',
       icon: 'i-ant-design:setting-outlined',
-      order: 2,
+      order: 5,
       type: 'catalog',
       path: '/system',
       children: {
@@ -244,72 +322,6 @@ async function main() {
               ],
             },
           },
-          {
-            name: '知识库管理',
-            title: 'system.knowledgeBase.title',
-            icon: 'i-ant-design:database-outlined',
-            order: 7,
-            type: 'menu',
-            path: '/system/knowledgeBase',
-            children: {
-              create: [
-                {
-                  name: '创建知识库',
-                  type: 'button',
-                  permission: 'system:knowledgeBase:create',
-                },
-                {
-                  name: '修改知识库',
-                  type: 'button',
-                  permission: 'system:knowledgeBase:update',
-                },
-                {
-                  name: '删除知识库',
-                  type: 'button',
-                  permission: 'system:knowledgeBase:delete',
-                },
-              ],
-            },
-          },
-          {
-            name: '文件管理',
-            title: 'system.document.title',
-            icon: 'i-ant-design:container-outlined',
-            order: 7,
-            type: 'menu',
-            path: '/system/document/:id',
-            hideInBreadcrumb: true,
-            hideInMenu: true,
-            children: {
-              create: [
-                {
-                  name: '上传文件',
-                  type: 'button',
-                  permission: 'system:document:upload',
-                },
-                {
-                  name: '解析文件',
-                  type: 'button',
-                  permission: 'system:document:parse',
-                },
-                {
-                  name: '修改文件',
-                  type: 'button',
-                  permission: 'system:document:update',
-                },
-                {
-                  name: '删除文件',
-                  type: 'button',
-                  permission: 'system:document:delete',
-                },
-                {
-                  name: '下载文件',
-                  type: 'button',
-                  permission: 'system:document:download',
-                },
-              ],
-            },
-          },
         ],
       },
     },
@@ -320,7 +332,7 @@ async function main() {
       name: '系统监控',
       title: 'monitor.title',
       icon: 'i-ant-design:android-filled',
-      order: 4,
+      order: 6,
       type: 'catalog',
       path: '/monitor',
       children: {
