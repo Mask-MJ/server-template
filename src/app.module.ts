@@ -12,6 +12,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { MonitorModule } from './modules/monitor/monitor.module';
 import { SystemModule } from './modules/system/system.module';
 import { KnowledgeBaseModule } from './modules/knowledge-base/knowledge-base.module';
+import { AssistantModule } from './modules/assistant/assistant.module';
 @Module({
   imports: [
     ConfigModule,
@@ -58,6 +59,7 @@ import { KnowledgeBaseModule } from './modules/knowledge-base/knowledge-base.mod
     SystemModule,
     MonitorModule,
     KnowledgeBaseModule,
+    AssistantModule,
   ],
   controllers: [],
   providers: [],

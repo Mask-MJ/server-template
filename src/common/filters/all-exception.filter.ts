@@ -23,6 +23,7 @@ export class AllExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const { headers, query, params } = ctx.getRequest<Request>();
+
     let message: unknown = exception['response'] || 'Internal Server Error';
     if (exception.name === 'PrismaClientKnownRequestError') {
       const shortMessage = exception.message.substring(

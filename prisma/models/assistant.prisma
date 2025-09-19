@@ -1,0 +1,43 @@
+model Assistant {
+  id                         Int             @id @default(autoincrement())
+  /// 助手名称
+  name                       String
+  /// 助手头像
+  avatar                     String?
+  createdAt                  DateTime        @default(now())
+  updatedAt                  DateTime        @updatedAt
+  /// LLM
+  /// 聊天模型名称
+  model_name                 String
+  /// 控制模型预测的随机性
+  temperature                Float           @default(0.1)
+  /// 核心采样
+  top_p                      Float           @default(0.3)
+  /// 频率惩罚
+  presence_penalty           Float           @default(0.4)
+  /// 惩罚频率
+  frequency_penalty          Float           @default(0.7)
+  /// 最大生成长度
+  max_tokens                 Int             @default(512)
+  /// prompt
+  /// 加权关键字相似度
+  similarity_threshold       Float           @default(0.2)
+  /// 关键词相似度权重
+  keywords_similarity_weight Float           @default(0.7)
+  /// 生成的回复数量
+  top_n                      Int             @default(6)
+  /// 重新排序或选择前 k 个项目
+  top_k                      Int             @default(1024)
+  /// 空响应返回内容
+  empty_response             String?
+  /// 开场问候语
+  opener                     String?
+  /// 提示词模板
+  prompt                     String?
+  /// 关联助手ID
+  assistantId                String?
+  description                String?
+  knowledgeBase              KnowledgeBase[]
+  userId                     Int
+  user                       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

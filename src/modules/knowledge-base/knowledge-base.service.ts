@@ -39,8 +39,6 @@ export class KnowledgeBaseService {
       include: { dept: true },
     });
 
-    console.log(createKnowledgeBaseDto);
-
     const response = await this.httpService.axiosRef.post(
       `${this.ragflowHost}/api/v1/datasets`,
       { name },
@@ -115,6 +113,22 @@ export class KnowledgeBaseService {
   }
 
   async remove(id: number) {
+    const knowledgeBase =
+      await this.prisma.client.knowledgeBase.findUniqueOrThrow({
+        where: { id },
+      });
+    const ragFlowDatasets = await this.httpService.axiosRef.delete(
+      `${this.ragflowHost}/api/v1/datasets`,
+      {
+        headers: { Authorization: `Bearer ${this.ragflow_apiKey}` },
+        params: { ids: [knowledgeBase.datasetId] },
+      },
+    );
+    if (ragFlowDatasets.data.code !== 0) {
+      throw new ConflictException(
+        `删除知识库失败, ${ragFlowDatasets.data.message}`,
+      );
+    }
     return await this.prisma.client.knowledgeBase.delete({ where: { id } });
   }
 
