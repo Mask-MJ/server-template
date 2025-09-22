@@ -81,7 +81,6 @@ export class UpdateKnowledgeBaseDto extends PartialType(
   OmitType(CreateKnowledgeBaseDto, ['embedding_model']),
 ) {
   @IsNumber()
-  @Type(() => Number)
   id: number;
 }
 

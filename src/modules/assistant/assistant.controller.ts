@@ -11,14 +11,16 @@ import {
 import { AssistantService } from './assistant.service';
 import {
   CreateAssistantDto,
+  CreateSessionDto,
   QueryAssistantDto,
   UpdateAssistantDto,
+  UpdateSessionDto,
 } from './assistant.dto';
 import { ApiTags, ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import { Permissions } from 'src/modules/auth/authorization/decorators/permissions.decorator';
 import { ActiveUser } from '../auth/decorators/active-user.decorator';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
-import { AssistantEntity } from './assistant.entity';
+import { AssistantEntity, SessionEntity } from './assistant.entity';
 
 @ApiTags('聊天助手管理')
 @ApiBearerAuth('bearer')
@@ -65,6 +67,7 @@ export class AssistantController {
   @ApiOkResponse({ type: AssistantEntity })
   @Permissions('assistant:update')
   update(
+    @Param('id') id: number,
     @ActiveUser() user: ActiveUserData,
     @Body() updateAssistantDto: UpdateAssistantDto,
   ) {
@@ -74,5 +77,33 @@ export class AssistantController {
   @Delete(':id')
   remove(@Param('id') id: number) {
     return this.assistantService.remove(id);
+  }
+
+  /**
+   * 创建与聊天助手的会话
+   */
+  @Post(':id/sessions')
+  @Permissions('sessions:create')
+  @ApiOkResponse({ type: SessionEntity })
+  createSession(
+    @Param('id') id: number,
+    @ActiveUser() user: ActiveUserData,
+    @Body() createSessionDto: CreateSessionDto,
+  ) {
+    return this.assistantService.createSession(id, user, createSessionDto);
+  }
+
+  /**
+   * 更新与聊天助手的会话
+   */
+  @Patch(':id/sessions/:sessionId')
+  @Permissions('sessions:update')
+  @ApiOkResponse({ type: SessionEntity })
+  updateSession(
+    @Param('id') id: number,
+    @Param('sessionId') sessionId: string,
+    @Body() updateSessionDto: UpdateSessionDto,
+  ) {
+    return this.assistantService.updateSession(id, sessionId, updateSessionDto);
   }
 }

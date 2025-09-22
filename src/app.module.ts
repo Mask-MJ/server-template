@@ -13,6 +13,7 @@ import { MonitorModule } from './modules/monitor/monitor.module';
 import { SystemModule } from './modules/system/system.module';
 import { KnowledgeBaseModule } from './modules/knowledge-base/knowledge-base.module';
 import { AssistantModule } from './modules/assistant/assistant.module';
+import { ChatModule } from './modules/chat/chat.module';
 @Module({
   imports: [
     ConfigModule,
@@ -60,6 +61,7 @@ import { AssistantModule } from './modules/assistant/assistant.module';
     MonitorModule,
     KnowledgeBaseModule,
     AssistantModule,
+    ChatModule,
   ],
   controllers: [],
   providers: [],

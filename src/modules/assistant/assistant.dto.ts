@@ -141,3 +141,17 @@ export class UpdateAssistantDto extends CreateAssistantDto {
   @Type(() => Number)
   id: number;
 }
+
+export class CreateSessionDto {
+  /** * 会话名称
+   * @example '会话1'
+   * */
+  @IsString()
+  @IsOptional()
+  name?: string;
+}
+
+export class UpdateSessionDto extends CreateSessionDto {
+  @IsString()
+  id: string;
+}

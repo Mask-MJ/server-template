@@ -82,6 +82,7 @@ export class KnowledgeBaseController {
   @ApiOkResponse({ type: KnowledgeBaseEntity })
   @Permissions('knowledgeBase:update')
   update(
+    @Param('id') id: number,
     @ActiveUser() user: ActiveUserData,
     @Body() updateKnowledgeBaseDto: UpdateKnowledgeBaseDto,
   ) {

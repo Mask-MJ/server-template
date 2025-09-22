@@ -23,3 +23,17 @@ export class AssistantEntity implements Assistant {
   updatedAt: Date;
   userId: number;
 }
+
+export class SessionEntity {
+  id: string;
+  name: string;
+  chat_id: string;
+  assistantId: number;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: number;
+  messages: {
+    content: string;
+    role: string;
+  }[];
+}
