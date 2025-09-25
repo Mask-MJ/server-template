@@ -1,6 +1,7 @@
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import {
   CreateAssistantDto,
+  CreateCompletionsDto,
   CreateSessionDto,
   QueryAssistantDto,
   UpdateAssistantDto,
@@ -199,14 +200,13 @@ export class AssistantService {
     const assistant = await this.prisma.client.assistant.findUniqueOrThrow({
       where: { id },
     });
-    console.log(user);
     const response = await this.httpService.axiosRef.post(
       `${this.ragflowHost}/api/v1/chats/${assistant.assistantId}/sessions`,
       { name: createSessionDto.name || '新会话', user_id: String(user.sub) },
       { headers: { Authorization: `Bearer ${this.ragflow_apiKey}` } },
     );
     if (response.data.code === 0) {
-      return await this.prisma.client.assistant.delete({ where: { id } });
+      return response.data.data;
     } else {
       throw new ConflictException(`创建会话失败, ${response.data.message}`);
     }
@@ -226,9 +226,67 @@ export class AssistantService {
       { headers: { Authorization: `Bearer ${this.ragflow_apiKey}` } },
     );
     if (response.data.code === 0) {
-      return await this.prisma.client.assistant.delete({ where: { id } });
+      return response.data.data;
     } else {
       throw new ConflictException(`更新会话失败, ${response.data.message}`);
     }
+  }
+
+  async findAllSessions(id: number, user: ActiveUserData) {
+    const assistant = await this.prisma.client.assistant.findUniqueOrThrow({
+      where: { id },
+    });
+    const response = await this.httpService.axiosRef.get(
+      `${this.ragflowHost}/api/v1/chats/${assistant.assistantId}/sessions`,
+      {
+        headers: { Authorization: `Bearer ${this.ragflow_apiKey}` },
+        params: { page: 1, page_size: 100000, user_id: String(user.sub) },
+      },
+    );
+    if (response.data.code === 0) {
+      return response.data.data;
+    } else {
+      throw new ConflictException(`获取会话列表失败, ${response.data.message}`);
+    }
+  }
+
+  async removeSession(id: number, sessionId: string) {
+    const assistant = await this.prisma.client.assistant.findUniqueOrThrow({
+      where: { id },
+    });
+    const response = await this.httpService.axiosRef.delete(
+      `${this.ragflowHost}/api/v1/chats/${assistant.assistantId}/sessions`,
+      {
+        headers: { Authorization: `Bearer ${this.ragflow_apiKey}` },
+        params: { ids: [sessionId] },
+      },
+    );
+    if (response.data.code === 0) {
+      return response.data.data;
+    } else {
+      throw new ConflictException(`删除会话失败, ${response.data.message}`);
+    }
+  }
+
+  async createCompletions(
+    id: number,
+    user: ActiveUserData,
+    createCompletions: CreateCompletionsDto,
+  ) {
+    const assistant = await this.prisma.client.assistant.findUniqueOrThrow({
+      where: { id },
+    });
+    return await this.httpService.axiosRef.post(
+      `${this.ragflowHost}/api/v1/chats/${assistant.assistantId}/completions`,
+      // `${this.ragflowHost}/api/v1/chats/5c55d9a099d911f0b7e776e3280a79bb/completions`,
+      {
+        ...createCompletions,
+        session_id: '635eaa2499d911f09a9576e3280a79bb',
+        user_id: String(user.sub),
+      },
+      {
+        headers: { Authorization: `Bearer ${this.ragflow_apiKey}` },
+      },
+    );
   }
 }

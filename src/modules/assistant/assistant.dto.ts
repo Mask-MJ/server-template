@@ -1,6 +1,6 @@
 import { PartialType, IntersectionType, PickType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateAssistantDto {
   /**
@@ -154,4 +154,30 @@ export class CreateSessionDto {
 export class UpdateSessionDto extends CreateSessionDto {
   @IsString()
   id: string;
+}
+
+export class CreateCompletionsDto {
+  /**
+   * 开始人工智能对话的问题
+   * @example '你好'
+   * */
+  @IsString()
+  question: string;
+
+  /**
+   * 是否开启流式响应
+   * @example true
+   * */
+  @IsOptional()
+  @IsBoolean()
+  @Type(() => Boolean)
+  stream?: boolean;
+
+  /**
+   * 会话ID
+   * @example '会话1'
+   * */
+  @IsString()
+  @IsOptional()
+  session_id: string;
 }

@@ -7,10 +7,12 @@ import {
   Param,
   Delete,
   Query,
+  Header,
 } from '@nestjs/common';
 import { AssistantService } from './assistant.service';
 import {
   CreateAssistantDto,
+  CreateCompletionsDto,
   CreateSessionDto,
   QueryAssistantDto,
   UpdateAssistantDto,
@@ -105,5 +107,45 @@ export class AssistantController {
     @Body() updateSessionDto: UpdateSessionDto,
   ) {
     return this.assistantService.updateSession(id, sessionId, updateSessionDto);
+  }
+
+  /**
+   * 获取与聊天助手的会话列表
+   */
+  @Get(':id/sessions')
+  @Permissions('sessions:read')
+  @ApiOkResponse({ type: SessionEntity, isArray: true })
+  findAllSessions(@Param('id') id: number, @ActiveUser() user: ActiveUserData) {
+    return this.assistantService.findAllSessions(id, user);
+  }
+
+  /**
+   * 删除与聊天助手的会话
+   */
+  @Delete(':id/sessions/:sessionId')
+  @Permissions('sessions:delete')
+  @ApiOkResponse({ type: SessionEntity })
+  removeSession(
+    @Param('id') id: number,
+    @Param('sessionId') sessionId: string,
+  ) {
+    return this.assistantService.removeSession(id, sessionId);
+  }
+
+  /**
+   * 向指定的聊天助手提问以开始 AI 驱动的对话
+   */
+  @Post(':id/completions')
+  @Permissions('completions:create')
+  @Header('Content-Type', 'text/event-stream')
+  @Header('Cache-Control', 'no-cache')
+  @Header('Connection', 'keep-alive')
+  @ApiOkResponse({ type: SessionEntity })
+  completions(
+    @Param('id') id: number,
+    @ActiveUser() user: ActiveUserData,
+    @Body() createCompletions: CreateCompletionsDto,
+  ) {
+    return this.assistantService.createCompletions(id, user, createCompletions);
   }
 }
