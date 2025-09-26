@@ -15,10 +15,16 @@ import {
   CreateCompletionsDto,
   CreateSessionDto,
   QueryAssistantDto,
+  QuerySessionDto,
   UpdateAssistantDto,
   UpdateSessionDto,
 } from './assistant.dto';
-import { ApiTags, ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiCreatedResponse,
+} from '@nestjs/swagger';
 import { Permissions } from 'src/modules/auth/authorization/decorators/permissions.decorator';
 import { ActiveUser } from '../auth/decorators/active-user.decorator';
 import { ActiveUserData } from '../auth/interfaces/active-user-data.interface';
@@ -34,6 +40,7 @@ export class AssistantController {
    */
   @Post()
   @Permissions('assistant:create')
+  @ApiCreatedResponse({ type: AssistantEntity })
   create(
     @ActiveUser() user: ActiveUserData,
     @Body() createAssistantDto: CreateAssistantDto,
@@ -86,7 +93,7 @@ export class AssistantController {
    */
   @Post(':id/sessions')
   @Permissions('sessions:create')
-  @ApiOkResponse({ type: SessionEntity })
+  @ApiCreatedResponse({ type: SessionEntity })
   createSession(
     @Param('id') id: number,
     @ActiveUser() user: ActiveUserData,
@@ -115,8 +122,12 @@ export class AssistantController {
   @Get(':id/sessions')
   @Permissions('sessions:read')
   @ApiOkResponse({ type: SessionEntity, isArray: true })
-  findAllSessions(@Param('id') id: number, @ActiveUser() user: ActiveUserData) {
-    return this.assistantService.findAllSessions(id, user);
+  findAllSessions(
+    @Param('id') id: number,
+    @ActiveUser() user: ActiveUserData,
+    @Query() querySessionDto: QuerySessionDto,
+  ) {
+    return this.assistantService.findAllSessions(id, user, querySessionDto);
   }
 
   /**

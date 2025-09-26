@@ -151,6 +151,15 @@ export class CreateSessionDto {
   name?: string;
 }
 
+export class QuerySessionDto {
+  /** * 会话名称
+   * @example '会话1'
+   * */
+  @IsString()
+  @IsOptional()
+  name?: string;
+}
+
 export class UpdateSessionDto extends CreateSessionDto {
   @IsString()
   id: string;

@@ -4,6 +4,7 @@ import {
   CreateCompletionsDto,
   CreateSessionDto,
   QueryAssistantDto,
+  QuerySessionDto,
   UpdateAssistantDto,
   UpdateSessionDto,
 } from './assistant.dto';
@@ -220,22 +221,29 @@ export class AssistantService {
     const assistant = await this.prisma.client.assistant.findUniqueOrThrow({
       where: { id },
     });
-    const response = await this.httpService.axiosRef.patch(
+    const response = await this.httpService.axiosRef.put(
       `${this.ragflowHost}/api/v1/chats/${assistant.assistantId}/sessions/${sessionId}`,
       { name: updateSessionDto.name },
       { headers: { Authorization: `Bearer ${this.ragflow_apiKey}` } },
     );
+    console.log(response.data);
     if (response.data.code === 0) {
-      return response.data.data;
+      return { message: '更新会话成功' };
     } else {
       throw new ConflictException(`更新会话失败, ${response.data.message}`);
     }
   }
 
-  async findAllSessions(id: number, user: ActiveUserData) {
+  async findAllSessions(
+    id: number,
+    user: ActiveUserData,
+    querySessionDto: QuerySessionDto,
+  ) {
+    const { name } = querySessionDto;
     const assistant = await this.prisma.client.assistant.findUniqueOrThrow({
       where: { id },
     });
+    console.log(name);
     const response = await this.httpService.axiosRef.get(
       `${this.ragflowHost}/api/v1/chats/${assistant.assistantId}/sessions`,
       {
@@ -243,6 +251,7 @@ export class AssistantService {
         params: { page: 1, page_size: 100000, user_id: String(user.sub) },
       },
     );
+    console.log(response.data);
     if (response.data.code === 0) {
       return response.data.data;
     } else {
