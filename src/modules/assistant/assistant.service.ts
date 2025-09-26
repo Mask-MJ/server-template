@@ -251,7 +251,6 @@ export class AssistantService {
         params: { page: 1, page_size: 100000, user_id: String(user.sub) },
       },
     );
-    console.log(response.data);
     if (response.data.code === 0) {
       return response.data.data;
     } else {
@@ -281,13 +280,14 @@ export class AssistantService {
     id: number,
     user: ActiveUserData,
     createCompletions: CreateCompletionsDto,
+    res: Response,
   ) {
     const assistant = await this.prisma.client.assistant.findUniqueOrThrow({
       where: { id },
     });
-    return await this.httpService.axiosRef.post(
+    const axios = this.httpService.axiosRef;
+    const response = await axios.post(
       `${this.ragflowHost}/api/v1/chats/${assistant.assistantId}/completions`,
-      // `${this.ragflowHost}/api/v1/chats/5c55d9a099d911f0b7e776e3280a79bb/completions`,
       {
         ...createCompletions,
         session_id: '635eaa2499d911f09a9576e3280a79bb',
@@ -295,7 +295,9 @@ export class AssistantService {
       },
       {
         headers: { Authorization: `Bearer ${this.ragflow_apiKey}` },
+        responseType: 'stream',
       },
     );
+    response.data.pipe(res);
   }
 }

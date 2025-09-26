@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   Header,
+  Res,
 } from '@nestjs/common';
 import { AssistantService } from './assistant.service';
 import {
@@ -156,7 +157,13 @@ export class AssistantController {
     @Param('id') id: number,
     @ActiveUser() user: ActiveUserData,
     @Body() createCompletions: CreateCompletionsDto,
+    @Res() res: Response,
   ) {
-    return this.assistantService.createCompletions(id, user, createCompletions);
+    return this.assistantService.createCompletions(
+      id,
+      user,
+      createCompletions,
+      res,
+    );
   }
 }
