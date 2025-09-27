@@ -288,11 +288,7 @@ export class AssistantService {
     const axios = this.httpService.axiosRef;
     const response = await axios.post(
       `${this.ragflowHost}/api/v1/chats/${assistant.assistantId}/completions`,
-      {
-        ...createCompletions,
-        session_id: '635eaa2499d911f09a9576e3280a79bb',
-        user_id: String(user.sub),
-      },
+      { ...createCompletions, user_id: String(user.sub) },
       {
         headers: { Authorization: `Bearer ${this.ragflow_apiKey}` },
         responseType: 'stream',
